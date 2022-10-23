@@ -1,9 +1,37 @@
 [package]
-name = "client"
+name = "grisked"
 version = "0.1.0"
+authors = ["Paul COMTE <paul.codepro@gmail.com>", "Guillaume BOUDAILLE <guillaume.boudaille@epitech.eu>"]
 edition = "2021"
+default-run = "grisked"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[workspace]
+members = ["grisked-ui"]
+
 [dependencies]
-iced = { path = "crates/iced" }
+grisked-ui = { path = "grisked-ui" }
+
+[[bin]]
+name = "grisked"
+path = "grisked-ui/src/bin/grisked.rs"
+
+[profile.release-lto]
+inherits = "release"
+lto = true
+codegen-units = 1
+
+# A profile which compiles all (non-workspace) dependencies in release mode
+# but Grisked code in dev mode. This gives a good debugging experience for your
+# code and fast performance of other people's code. After the initial
+# build subsequent ones are as fast as dev mode builds.
+# See https://doc.rust-lang.org/cargo/reference/profiles.html
+# To use this profile:
+#   cargo build --profile fastdev
+#   cargo run --profile fastdev --bin grisked
+[profile.fastdev.package."*"]
+opt-level = 3
+
+[profile.fastdev]
+inherits = "dev"

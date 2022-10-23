@@ -1,0 +1,10 @@
+[package]
+name = "grisked-ui"
+version = "0.1.0"
+authors = ["Paul COMTE <paul.codepro@gmail.com>", "Guillaume BOUDAILLE <guillaume.boudaille@epitech.eu>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+iced = { git = "https://github.com/iced-rs/iced" }
