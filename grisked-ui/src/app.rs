@@ -1,9 +1,9 @@
-use iced::widget::{column, container, radio, Column};
-use iced::{executor, Color};
+use iced::widget::{button, column, container, row, Column};
+use iced::{executor, theme};
 use iced::{Application, Command, Element, Length, Settings, Theme};
 
 use crate::entity::menu::*;
-use crate::Message;
+use crate::{Language, Message};
 
 pub fn launch() -> iced::Result {
     Grisked::run(Settings {
@@ -16,6 +16,7 @@ pub fn launch() -> iced::Result {
 #[derive(Default)]
 struct Grisked {
     menu_type: MenuType,
+    language: Language,
 }
 
 impl Application for Grisked {
@@ -51,14 +52,17 @@ impl Application for Grisked {
             MenuType::Backup,
         ]
         .iter()
-        .fold(Column::new().spacing(10), |column, option| {
-            column.push(radio(
-                format!("{} {:?}", option.get_icon(), option),
-                *option,
-                Some(*option),
-                Message::MenuChanged,
-            ))
-        });
+        .fold(
+            Column::new().spacing(10).height(Length::Fill),
+            |column, option| {
+                column.push(
+                    button(row![option.get_icon(), option.get_name(&self.language)].spacing(10))
+                        .on_press(crate::Message::MenuChanged(*option))
+                        .padding(10)
+                        .style(theme::Button::Primary),
+                )
+            },
+        );
 
         let content = column![choose_menu];
 

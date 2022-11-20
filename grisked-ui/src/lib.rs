@@ -5,3 +5,10 @@ pub mod entity;
 pub enum Message {
     MenuChanged(entity::menu::MenuType),
 }
+
+#[derive(Default)]
+pub enum Language {
+    #[default]
+    EN,
+    FR,
+}
