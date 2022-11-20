@@ -1,7 +1,6 @@
-use iced::alignment::{Horizontal, Vertical};
 use iced::theme::Container;
-use iced::widget::{self, button, column, container, row, text, Column};
-use iced::{executor, theme, Alignment};
+use iced::widget::{button, column, container, row, text, Column};
+use iced::{executor, theme};
 use iced::{Application, Command, Element, Length, Settings, Theme};
 
 use crate::entity::menu::*;
@@ -79,16 +78,13 @@ impl Application for Grisked {
 
         let context = match self.menu_type {
             MenuType::Home => {
-                let value = Column::new()
+                let left_side = Column::new()
                     .spacing(10)
                     .push(
                         container(column!(
                             text("Comptes récemments utilisés"),
-                            row!(
-                                column!(text("Compte 1"), text("Livret A"))
-                                    .align_items(Alignment::Start),
-                                column!(text("834€"), text("7493€")).align_items(Alignment::End)
-                            )
+                            row!(text("Compte 1"), text("834€")).spacing(20),
+                            row!(text("Livret A"), text("7493€")).spacing(25)
                         ))
                         .style(Container::Box)
                         .padding(20),
@@ -96,7 +92,7 @@ impl Application for Grisked {
                     .push(
                         container(column!(
                             text("Echéances en cours"),
-                            row!(text("Prêt de la 4090 RTX"), text("10384€")),
+                            row!(text("Prêt de la 4090 RTX"), text("834€")).spacing(20),
                         ))
                         .style(Container::Box)
                         .padding(20),
@@ -110,7 +106,22 @@ impl Application for Grisked {
                         .padding(20),
                     );
 
-                let container: Element<Message> = container(value)
+                let right_side = Column::new()
+                    .spacing(10)
+                    .push(
+                        container(column!(
+                            text("Dépenses du mois"),
+                            text("[] Transports"),
+                            text("[] Informatique"),
+                            text("[] Sports"),
+                            text("[] Alimentation"),
+                        ))
+                        .style(Container::Box)
+                        .padding(20),
+                    )
+                    .width(Length::FillPortion(2));
+
+                let container: Element<Message> = container(row!(left_side, right_side))
                     .width(Length::FillPortion(3))
                     .height(Length::Fill)
                     .padding(50)
