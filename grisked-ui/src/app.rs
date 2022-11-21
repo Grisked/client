@@ -60,13 +60,19 @@ impl Application for Grisked {
                 .height(Length::Fill)
                 .width(Length::FillPortion(1)),
             |column, option| {
-                column.push(
-                    button(row![option.get_icon(), option.get_name(&self.language)].spacing(10))
-                        .on_press(crate::Message::MenuChanged(*option))
-                        .padding(10)
-                        .style(theme::Button::Primary)
-                        .width(Length::Fill),
-                )
+                let mut button = button(row![option.get_icon(), option.get_name(&self.language)].spacing(10))
+                .on_press(crate::Message::MenuChanged(*option))
+                .padding(10)
+                .width(Length::Fill);
+
+                if &self.menu_type == option {
+                    button = button.style(theme::Button::Primary)
+                }
+                else {
+                    button = button.style(theme::Button::Secondary)
+                }
+                
+                column.push(button)
             },
         );
 
@@ -80,10 +86,11 @@ impl Application for Grisked {
         let context = match self.menu_type {
             MenuType::Home => {
                 let left_side = Column::new()
+                    .width(Length::FillPortion(2))
                     .spacing(10)
                     .push(
                         container(column!(
-                            text("Comptes récemments utilisés"),
+                            text("Comptes récemments utilisés").width(Length::Fill),
                             row!(text("Compte 1"), text("834€")).spacing(20),
                             row!(text("Livret A"), text("7493€")).spacing(25)
                         ))
@@ -92,7 +99,7 @@ impl Application for Grisked {
                     )
                     .push(
                         container(column!(
-                            text("Echéances en cours"),
+                            text("Echéances en cours").width(Length::Fill),
                             row!(text("Prêt de la 4090 RTX"), text("834€")).spacing(20),
                         ))
                         .style(Container::Box)
@@ -100,7 +107,7 @@ impl Application for Grisked {
                     )
                     .push(
                         container(column!(
-                            text("Rappels"),
+                            text("Rappels").width(Length::Fill),
                             row!(text("Payer la facture d'eau du 11/04/23"))
                         ))
                         .style(Container::Box)
@@ -108,10 +115,11 @@ impl Application for Grisked {
                     );
 
                 let right_side = Column::new()
+                    .width(Length::FillPortion(2))
                     .spacing(10)
                     .push(
                         container(column!(
-                            text("Dépenses du mois"),
+                            text("Dépenses du mois").width(Length::Fill),
                             text("[] Transports"),
                             text("[] Informatique"),
                             text("[] Sports"),
@@ -122,7 +130,7 @@ impl Application for Grisked {
                     )
                     .width(Length::FillPortion(2));
 
-                let container: Element<Message> = container(row!(left_side, right_side))
+                let container: Element<Message> = container(row!(left_side, right_side).spacing(20))
                     .width(Length::FillPortion(3))
                     .height(Length::Fill)
                     .padding(50)
