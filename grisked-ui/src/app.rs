@@ -2,6 +2,7 @@ use iced::theme::Container;
 use iced::widget::{button, column, container, row, text, Column};
 use iced::{executor, theme};
 use iced::{Application, Command, Element, Length, Settings, Theme};
+use iced::alignment;
 
 use crate::entity::menu::*;
 use crate::{Language, Message};
@@ -122,6 +123,47 @@ impl Application for Grisked {
                     .width(Length::FillPortion(2));
 
                 let container: Element<Message> = container(row!(left_side, right_side))
+                    .width(Length::FillPortion(3))
+                    .height(Length::Fill)
+                    .padding(50)
+                    .into();
+
+                Some(container)
+            }
+            MenuType::Accounts => {
+                let contents = Column::new()
+                    .spacing(10)
+                    .push(
+                        container(column!(
+                            text("Comptes courants").horizontal_alignment(alignment::Horizontal::Center).width(Length::Fill).size(30),
+                            row!(text(" ")),
+                            row!(text("Compte 1"), text("834€").horizontal_alignment(alignment::Horizontal::Right).width(Length::Fill)).spacing(25),
+                            row!(text("Compte 2"), text("7493€").horizontal_alignment(alignment::Horizontal::Right).width(Length::Fill)).spacing(25),
+                            row!(text(" ")),
+                            row!(text("Total courants: 45678€").horizontal_alignment(alignment::Horizontal::Right).width(Length::Fill).size(15)),
+                        ))
+                        .style(Container::Box)
+                        .padding(20),
+                    )
+                    .push(
+                        container(column!(
+                            text("Comptes épargnes").horizontal_alignment(alignment::Horizontal::Center).width(Length::Fill).size(30),
+                            row!(text(" ")),
+                            row!(text("Livret A"), text("10454€").horizontal_alignment(alignment::Horizontal::Right).width(Length::Fill)).spacing(25),
+                            row!(text(" ")),
+                            row!(text("Total épargnes: 45678€").horizontal_alignment(alignment::Horizontal::Right).width(Length::Fill).size(15)),
+                        ))
+                        .style(Container::Box)
+                        .padding(20),
+                    )
+                    .push(
+                        container(column!(
+                            text("Total: 17483847€").horizontal_alignment(alignment::Horizontal::Right).width(Length::Fill),
+                        ))
+                        .style(Container::Box)
+                        .padding([3, 20, 3, 20]),
+                    );
+                let container: Element<Message> = container(row!(contents))
                     .width(Length::FillPortion(3))
                     .height(Length::Fill)
                     .padding(50)
