@@ -90,7 +90,8 @@ impl Application for Grisked {
                     .spacing(10)
                     .push(
                         container(column!(
-                            text("Comptes récemments utilisés").width(Length::Fill),
+                            text("Comptes récemments utilisés").width(Length::Fill).horizontal_alignment(alignment::Horizontal::Center),
+                            row!(text(" ")),
                             row!(text("Compte 1"), text("834€")).spacing(20),
                             row!(text("Livret A"), text("7493€")).spacing(25)
                         ))
@@ -99,7 +100,8 @@ impl Application for Grisked {
                     )
                     .push(
                         container(column!(
-                            text("Echéances en cours").width(Length::Fill),
+                            text("Echéances en cours").width(Length::Fill).horizontal_alignment(alignment::Horizontal::Center),
+                            row!(text(" ")),
                             row!(text("Prêt de la 4090 RTX"), text("834€")).spacing(20),
                         ))
                         .style(Container::Box)
@@ -107,7 +109,8 @@ impl Application for Grisked {
                     )
                     .push(
                         container(column!(
-                            text("Rappels").width(Length::Fill),
+                            text("Rappels").width(Length::Fill).horizontal_alignment(alignment::Horizontal::Center),
+                            row!(text(" ")),
                             row!(text("Payer la facture d'eau du 11/04/23"))
                         ))
                         .style(Container::Box)
@@ -119,7 +122,8 @@ impl Application for Grisked {
                     .spacing(10)
                     .push(
                         container(column!(
-                            text("Dépenses du mois").width(Length::Fill),
+                            text("Dépenses du mois").width(Length::Fill).horizontal_alignment(alignment::Horizontal::Center),
+                            row!(text(" ")),
                             text("[] Transports"),
                             text("[] Informatique"),
                             text("[] Sports"),
