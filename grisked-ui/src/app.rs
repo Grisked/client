@@ -183,6 +183,29 @@ impl Application for Grisked {
 
                 Some(container)
             }
+            MenuType::Backup => {
+                let contents = Column::new()
+                    .spacing(10)
+                    .push(
+                        container(column!(
+                            button(text("Savegarder").horizontal_alignment(alignment::Horizontal::Center).width(Length::Fill).size(30)).width(Length::Fill),
+                            row!(" "),
+                            button(text("Savegarder sous").horizontal_alignment(alignment::Horizontal::Center).width(Length::Fill).size(30)).width(Length::Fill),
+                            row!(" "),
+                            button(text("Charger").horizontal_alignment(alignment::Horizontal::Center).width(Length::Fill).size(30)).width(Length::Fill),
+                            row!(" "),
+                            button(text("Ouvrir le dossier de sauvegarde").horizontal_alignment(alignment::Horizontal::Center).width(Length::Fill).size(30)).width(Length::Fill),
+                        ))
+                        .padding(20),
+                    );
+                let container: Element<Message> = container(row!(contents))
+                    .width(Length::FillPortion(3))
+                    .height(Length::Fill)
+                    .padding(50)
+                    .into();
+
+                Some(container)
+            }
             _ => None,
         };
 
