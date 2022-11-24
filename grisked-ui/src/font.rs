@@ -1,9 +1,8 @@
-use std::fs;
+
 
 use iced::{
-    alignment,
     widget::{text, Text},
-    Font, Length,
+    Font,
 };
 
 pub enum FontFamily {
