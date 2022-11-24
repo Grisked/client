@@ -1,12 +1,31 @@
+use serde::{Deserialize, Serialize};
+
 use crate::models::currency::Currency;
 
 /// App settings data model
+#[derive(Deserialize, Serialize)]
 pub struct Settings {
     currencies: Vec<Currency>,
 }
 
+impl Default for Settings {
+    fn default() -> Self {
+        let usd = Currency::new('$', "United States dollar", "USD", 1.0);
+        let eur = Currency::new('€', "Euro", "EUR", 0.97);
+        let gpt = Currency::new('£', "British pound sterling", "GBP", 0.84);
+
+        let currencies: Vec<Currency> = vec![usd, eur, gpt];
+
+        Self { currencies }
+    }
+}
+
 impl Settings {
-    fn add_currency(&mut self, currency: Currency) {
+    pub fn new(currencies: Vec<Currency>) -> Self {
+        Self { currencies }
+    }
+
+    pub fn add_currency(&mut self, currency: Currency) {
         if !self.currencies.contains(&currency) {
             self.currencies.push(currency);
         }

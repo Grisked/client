@@ -1,10 +1,7 @@
+use serde::{Deserialize, Serialize};
+
 /// Currency data model
-/// example:
-/// symbol: char = '$'
-/// name: String = "United States dollar"
-/// alias: String = "USD"
-/// convert_rate: f32 = 1.0f // The convert rate of $1 USD is $1 USD
-#[derive(PartialEq)]
+#[derive(PartialEq, Deserialize, Serialize)]
 pub struct Currency {
     pub symbol: char,
     pub name: String,
@@ -13,6 +10,14 @@ pub struct Currency {
 }
 
 impl Currency {
+    /// Create a new currency
+    /// ```
+    /// let symbol: char = '$'
+    /// let name: &str = "United States dollar"
+    /// let alias: &str = "USD"
+    /// let convert_rate: f32 = 1.0
+    /// let currency = Currency::new(symbol, name, alias, convert_rate);
+    /// ```
     pub fn new(symbol: char, name: &str, alias: &str, convert_rate: f32) -> Self {
         Self {
             symbol,
