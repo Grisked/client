@@ -1,5 +1,6 @@
 pub mod app;
 pub mod entity;
+pub mod font;
 
 #[derive(Debug, Clone, Copy)]
 pub enum Message {

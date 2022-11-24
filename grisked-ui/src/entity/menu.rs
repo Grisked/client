@@ -9,7 +9,7 @@ use crate::Language;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum MenuType {
     #[default]
-    Home,
+    Dashboard,
     Accounts,
     Deadlines,
     Charts,
@@ -19,7 +19,7 @@ pub enum MenuType {
 impl MenuType {
     pub fn get_icon(&self) -> Text<'static> {
         match self {
-            Self::Home => icon('🏠'),
+            Self::Dashboard => icon('🏠'),
             Self::Accounts => icon('💰'),
             Self::Deadlines => icon('📝'),
             Self::Charts => icon('📈'),
@@ -30,14 +30,14 @@ impl MenuType {
     pub fn get_name(&self, language: &Language) -> &str {
         match language {
             Language::EN => match self {
-                Self::Home => "Home",
+                Self::Dashboard => "Dashboard",
                 Self::Accounts => "Accounts",
                 Self::Deadlines => "Deadlines",
                 Self::Charts => "Charts",
                 Self::Backup => "Backup",
             },
             Language::FR => match self {
-                Self::Home => "Accueil",
+                Self::Dashboard => "Dashboard",
                 Self::Accounts => "Comptes",
                 Self::Deadlines => "Echéances",
                 Self::Charts => "Graphiques",
