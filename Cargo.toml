@@ -8,10 +8,11 @@ default-run = "grisked"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [workspace]
-members = ["grisked-ui"]
+members = ["grisked-ui", "grisked-profile"]
 
 [dependencies]
 grisked-ui = { path = "grisked-ui" }
+grisked-profile = { path = "grisked-profile" }
 
 [[bin]]
 name = "grisked"
