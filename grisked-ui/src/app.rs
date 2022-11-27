@@ -5,6 +5,7 @@ use iced::{executor, theme};
 use iced::{Application, Command, Element, Length, Settings, Theme};
 
 use crate::entity::menu::*;
+use crate::font::*;
 use crate::{Language, Message};
 
 pub fn launch() -> iced::Result {
@@ -60,9 +61,13 @@ impl Application for Grisked {
                 .height(Length::FillPortion(1))
                 .width(Length::Fill),
             |row, option| {
-                let mut button = button(row![option.get_name(&self.language)].spacing(10))
-                    .on_press(crate::Message::MenuChanged(*option))
-                    .padding(10);
+                let mut button = button(
+                    row![FontType::Header
+                        .get_text(option.get_name(&self.language), FontFamily::Kanit)]
+                    .spacing(10),
+                )
+                .on_press(crate::Message::MenuChanged(*option))
+                .padding(10);
 
                 if &self.menu_type == option {
                     button = button.style(theme::Button::Primary)
@@ -90,12 +95,34 @@ impl Application for Grisked {
                     .spacing(10)
                     .push(
                         container(column!(
-                            text("Comptes récemments utilisés")
+                            FontType::Title
+                                .get_text("Comptes récents", FontFamily::IndieFlower)
                                 .width(Length::Fill)
-                                .horizontal_alignment(alignment::Horizontal::Center),
-                            row!(text(" ")),
-                            row!(text("Compte 1"), text("834€")).spacing(20),
-                            row!(text("Livret A"), text("7493€")).spacing(25)
+                                .horizontal_alignment(alignment::Horizontal::Left),
+                            column!(
+                                column!(
+                                    row!(
+                                        FontType::Text.get_text("Compte commun", FontFamily::Kanit),
+                                        FontType::Text
+                                            .get_text("400€", FontFamily::Kanit)
+                                            .horizontal_alignment(alignment::Horizontal::Right)
+                                    ),
+                                    row!(text("Clavier gaming"), text("-140€"))
+                                        .padding([0, 0, 0, 20]),
+                                    row!(text("Fiverr"), text("+220€")).padding([0, 0, 0, 20])
+                                ),
+                                column!(
+                                    row!(
+                                        FontType::Text.get_text("Livret A", FontFamily::Kanit),
+                                        FontType::Text
+                                            .get_text("2520.90€", FontFamily::Kanit)
+                                            .horizontal_alignment(alignment::Horizontal::Right)
+                                    ),
+                                    row!(text("Grand mère"), text("+20.70€"))
+                                        .padding([0, 0, 0, 20]),
+                                )
+                            )
+                            .spacing(25),
                         ))
                         .style(Container::Box)
                         .padding(20),

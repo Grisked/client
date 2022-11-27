@@ -1,5 +1,3 @@
-
-
 use iced::{
     widget::{text, Text},
     Font,
@@ -98,9 +96,9 @@ impl FontSize {
 }
 
 pub enum FontType {
-    HEADER,
-    TITLE,
-    TEXT,
+    Header,
+    Title,
+    Text,
 }
 
 impl FontType {
@@ -112,9 +110,9 @@ impl FontType {
 
     fn get_font(&self, family: FontFamily) -> Font {
         match self {
-            Self::HEADER => FontSize::SemiBold.get_font(family),
-            Self::TITLE => FontSize::Medium.get_font(family),
-            Self::TEXT => FontSize::Light.get_font(family),
+            Self::Header => FontSize::SemiBold.get_font(family),
+            Self::Title => FontSize::Medium.get_font(family),
+            Self::Text => FontSize::Light.get_font(family),
         }
     }
 }
