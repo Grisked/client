@@ -199,7 +199,7 @@ impl Application for Grisked {
 
                 let container: Element<Message> =
                     container(row!(left_side, right_side).spacing(20))
-                        .height(Length::FillPortion(3))
+                        .height(Length::FillPortion(5))
                         .width(Length::Fill)
                         .padding(50)
                         .into();
