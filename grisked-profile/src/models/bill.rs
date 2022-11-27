@@ -2,6 +2,19 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 pub struct Bill {
-    bill_id: u64,
-    bill_price: f64,
+    pub id: u64,
+    pub name: String,
+    pub price: f64,
+    pub due_date: u16,
+}
+
+impl Bill {
+    pub fn new(id: u64, name: String, price: f64, due_date: u16) -> Self {
+        Self {
+            id,
+            name,
+            price,
+            due_date,
+        }
+    }
 }

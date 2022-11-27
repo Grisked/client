@@ -4,6 +4,11 @@ use iced::widget::{button, column, container, row, text, Column, Row};
 use iced::{executor, theme};
 use iced::{Application, Command, Element, Length, Settings, Theme};
 
+use grisked_profile::{
+    models::{account::Account, bill::Bill},
+    profile::Profile,
+};
+
 use crate::entity::menu::*;
 use crate::font::*;
 use crate::{Language, Message};
@@ -20,6 +25,7 @@ pub fn launch() -> iced::Result {
 struct Grisked {
     menu_type: MenuType,
     language: Language,
+    pub profile: Profile,
 }
 
 impl Application for Grisked {
@@ -32,7 +38,16 @@ impl Application for Grisked {
     type Flags = ();
 
     fn new(_flags: ()) -> (Self, Command<Message>) {
-        (Grisked::default(), Command::none())
+        let mut grisked = Grisked::default();
+        let bills = vec![
+            Bill::new(1, "Clavier Gaming".to_string(), -140.0, 120),
+            Bill::new(2, "Fiverr".to_string(), 220.0, 120),
+        ];
+        let account = Account::new("Compte Commun", 320.0, bills);
+
+        grisked.profile.accounts.push(account);
+
+        (grisked, Command::none())
     }
 
     fn title(&self) -> String {
@@ -96,33 +111,46 @@ impl Application for Grisked {
                     .push(
                         container(column!(
                             FontType::Title
-                                .get_text("Comptes récents", FontFamily::IndieFlower)
+                                .get_text("Comptes récents".to_string(), FontFamily::IndieFlower)
                                 .width(Length::Fill)
                                 .horizontal_alignment(alignment::Horizontal::Left),
-                            column!(
-                                column!(
-                                    row!(
-                                        FontType::Text.get_text("Compte commun", FontFamily::Kanit),
-                                        FontType::Text
-                                            .get_text("400€", FontFamily::Kanit)
-                                            .horizontal_alignment(alignment::Horizontal::Right)
-                                    ),
-                                    row!(text("Clavier gaming"), text("-140€"))
-                                        .padding([0, 0, 0, 20]),
-                                    row!(text("Fiverr"), text("+220€")).padding([0, 0, 0, 20])
-                                ),
-                                column!(
-                                    row!(
-                                        FontType::Text.get_text("Livret A", FontFamily::Kanit),
-                                        FontType::Text
-                                            .get_text("2520.90€", FontFamily::Kanit)
-                                            .horizontal_alignment(alignment::Horizontal::Right)
-                                    ),
-                                    row!(text("Grand mère"), text("+20.70€"))
-                                        .padding([0, 0, 0, 20]),
-                                )
-                            )
-                            .spacing(25),
+                            {
+                                let mut column = Column::new().spacing(25);
+                                for account in &self.profile.accounts {
+                                    column = column.push(column!(
+                                        row!(
+                                            FontType::Text
+                                                .get_text(account.name.clone(), FontFamily::Kanit),
+                                            FontType::Text
+                                                .get_text(
+                                                    format!("{}€", &account.get_account_balance()),
+                                                    FontFamily::Kanit
+                                                )
+                                                .horizontal_alignment(alignment::Horizontal::Right)
+                                        ),
+                                        {
+                                            let mut c_bills = Column::new();
+                                            for bill in &account.bills {
+                                                c_bills = c_bills.push(
+                                                    row!(
+                                                        FontType::Text.get_text(
+                                                            bill.name.clone(),
+                                                            FontFamily::Kanit
+                                                        ),
+                                                        FontType::Text.get_text(
+                                                            format!("{}€", &bill.price),
+                                                            FontFamily::Kanit
+                                                        )
+                                                    )
+                                                    .padding([0, 0, 0, 20]),
+                                                );
+                                            }
+                                            c_bills
+                                        }
+                                    ))
+                                }
+                                column
+                            }
                         ))
                         .style(Container::Box)
                         .padding(20),

@@ -102,7 +102,7 @@ pub enum FontType {
 }
 
 impl FontType {
-    pub fn get_text(&self, value: &str, family: FontFamily) -> Text<'static> {
+    pub fn get_text(&self, value: String, family: FontFamily) -> Text<'static> {
         let font = self.get_font(family);
 
         text(value).font(font)

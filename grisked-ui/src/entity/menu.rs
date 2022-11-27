@@ -27,21 +27,21 @@ impl MenuType {
         }
     }
 
-    pub fn get_name(&self, language: &Language) -> &str {
+    pub fn get_name(&self, language: &Language) -> String {
         match language {
             Language::EN => match self {
-                Self::Dashboard => "Dashboard",
-                Self::Accounts => "Accounts",
-                Self::Deadlines => "Deadlines",
-                Self::Charts => "Charts",
-                Self::Backup => "Backup",
+                Self::Dashboard => "Dashboard".to_string(),
+                Self::Accounts => "Accounts".to_string(),
+                Self::Deadlines => "Deadlines".to_string(),
+                Self::Charts => "Charts".to_string(),
+                Self::Backup => "Backup".to_string(),
             },
             Language::FR => match self {
-                Self::Dashboard => "Dashboard",
-                Self::Accounts => "Comptes",
-                Self::Deadlines => "Echéances",
-                Self::Charts => "Graphiques",
-                Self::Backup => "Sauvegarde",
+                Self::Dashboard => "Dashboard".to_string(),
+                Self::Accounts => "Comptes".to_string(),
+                Self::Deadlines => "Echéances".to_string(),
+                Self::Charts => "Graphiques".to_string(),
+                Self::Backup => "Sauvegarde".to_string(),
             },
         }
     }
