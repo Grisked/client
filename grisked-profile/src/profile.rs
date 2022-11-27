@@ -1,11 +1,12 @@
 use serde::{Deserialize, Serialize};
 
-use crate::models::settings::Settings;
+use crate::models::{account::Account, settings::Settings};
 
 #[derive(Deserialize, Serialize)]
 pub struct Profile {
     profile_path: String,
     settings: Settings,
+    accounts: Vec<Account>,
 }
 
 impl Profile {
@@ -17,6 +18,7 @@ impl Profile {
         Self {
             profile_path: "profile.json".to_string(),
             settings: Settings::default(),
+            accounts: Vec::new(),
         }
     }
 

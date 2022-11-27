@@ -31,10 +31,11 @@ impl Settings {
         }
     }
 
+    /// TODO change .retain to drain_all
     pub fn remove_currency<P>(&mut self, filter: P)
     where
-        P: FnMut(&Currency) -> bool,
+        P: FnMut(&mut Currency) -> bool,
     {
-        self.currencies.retain(filter);
+        self.currencies.drain_filter(filter);
     }
 }
