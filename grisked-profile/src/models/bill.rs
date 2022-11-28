@@ -17,4 +17,12 @@ impl Bill {
             due_date,
         }
     }
+
+    pub fn pretty_price(&self) -> String {
+        if self.price < 0.0 {
+            format!("{:0.2} €", self.price)
+        } else {
+            format!("+{:0.2} €", self.price)
+        }
+    }
 }
