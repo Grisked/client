@@ -69,16 +69,21 @@ impl Application for Grisked {
             |row, option| {
                 let mut button = button(
                     row![FontType::Header
-                        .get_text(option.get_name(&self.language), FontFamily::Kanit)]
+                        .get_text(option.get_name(&self.language), FontFamily::Kanit)
+                        .size(26)]
                     .spacing(10),
                 )
                 .on_press(crate::Message::MenuChanged(*option))
                 .padding(10);
 
                 if &self.menu_type == option {
-                    button = button.style(theme::Button::Primary)
+                    button = button.style(theme::Button::Custom(Box::new(
+                        sidebar_button::SidebarSelectedButton,
+                    )))
                 } else {
-                    button = button.style(theme::Button::Secondary)
+                    button = button.style(theme::Button::Custom(Box::new(
+                        sidebar_button::SidebarIgnoredButton,
+                    )))
                 }
 
                 row.push(button)
@@ -91,7 +96,7 @@ impl Application for Grisked {
             .width(Length::Fill)
             .height(Length::FillPortion(1))
             .padding(20)
-            .style(theme::Container::Custom(sidebar::get_appearance))
+            .style(theme::Container::Custom(Box::new(sidebar::Sidebar)))
             .into();
 
         let context = match self.menu_type {
@@ -113,12 +118,12 @@ impl Application for Grisked {
                                     column = column.push(column!(
                                         row!(
                                             text("• ")
-                                                .size(30)
+                                                .size(20)
                                                 .vertical_alignment(alignment::Vertical::Center)
                                                 .height(Length::Units(25)),
                                             FontType::TextBold
                                                 .get_text(account.name.clone(), FontFamily::Kanit)
-                                                .size(25),
+                                                .size(20),
                                             FontType::TextBold
                                                 .get_text(
                                                     format!(
@@ -127,7 +132,7 @@ impl Application for Grisked {
                                                     ),
                                                     FontFamily::Kanit
                                                 )
-                                                .size(25)
+                                                .size(20)
                                                 .horizontal_alignment(alignment::Horizontal::Right)
                                                 .width(Length::Fill)
                                         ),
@@ -137,7 +142,7 @@ impl Application for Grisked {
                                                 c_bills = c_bills.push(
                                                     row!(
                                                         text("• ")
-                                                            .size(30)
+                                                            .size(20)
                                                             .vertical_alignment(
                                                                 alignment::Vertical::Center
                                                             )
@@ -181,7 +186,7 @@ impl Application for Grisked {
                                 column
                             }
                         ))
-                        .style(theme::Container::Custom(custom_box::get_appearance))
+                        .style(theme::Container::Custom(Box::new(custom_box::CustomBox)))
                         .padding(20),
                     )
                     .push(
@@ -192,7 +197,7 @@ impl Application for Grisked {
                             row!(text(" ")),
                             row!(text("Prêt de la 4090 RTX"), text("834€")).spacing(20),
                         ))
-                        .style(theme::Container::Custom(custom_box::get_appearance))
+                        .style(theme::Container::Custom(Box::new(custom_box::CustomBox)))
                         .padding(20),
                     )
                     .push(
@@ -203,7 +208,7 @@ impl Application for Grisked {
                             row!(text(" ")),
                             row!(text("Payer la facture d'eau du 11/04/23"))
                         ))
-                        .style(theme::Container::Custom(custom_box::get_appearance))
+                        .style(theme::Container::Custom(Box::new(custom_box::CustomBox)))
                         .padding(20),
                     );
 
@@ -221,14 +226,14 @@ impl Application for Grisked {
                             text("[] Sports"),
                             text("[] Alimentation"),
                         ))
-                        .style(theme::Container::Custom(custom_box::get_appearance))
+                        .style(theme::Container::Custom(Box::new(custom_box::CustomBox)))
                         .padding(20),
                     )
                     .width(Length::FillPortion(2));
 
                 let container: Element<Message> =
                     container(row!(left_side, right_side).spacing(20))
-                        .height(Length::FillPortion(5))
+                        .height(Length::FillPortion(6))
                         .width(Length::Fill)
                         .padding(50)
                         .into();
@@ -299,7 +304,7 @@ impl Application for Grisked {
                         .padding([3, 20, 3, 20]),
                     );
                 let container: Element<Message> = container(row!(contents))
-                    .height(Length::FillPortion(3))
+                    .height(Length::FillPortion(6))
                     .width(Length::Fill)
                     .padding(50)
                     .into();
@@ -344,7 +349,7 @@ impl Application for Grisked {
                     .padding(20),
                 );
                 let container: Element<Message> = container(row!(contents))
-                    .height(Length::FillPortion(3))
+                    .height(Length::FillPortion(6))
                     .width(Length::Fill)
                     .padding(50)
                     .into();
@@ -360,14 +365,18 @@ impl Application for Grisked {
                 container(content)
                     .width(Length::Fill)
                     .height(Length::Fill)
-                    .style(theme::Container::Custom(background::get_appearance))
+                    .style(theme::Container::Custom(Box::new(
+                        background::AppBackground,
+                    )))
                     .into()
             }
             None => container(sidebar_container)
                 .width(Length::Fill)
                 .height(Length::Fill)
                 .padding(20)
-                .style(theme::Container::Custom(background::get_appearance))
+                .style(theme::Container::Custom(Box::new(
+                    background::AppBackground,
+                )))
                 .into(),
         }
     }
