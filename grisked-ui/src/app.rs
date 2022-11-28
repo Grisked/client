@@ -197,17 +197,6 @@ impl Application for Grisked {
                         ))
                         .style(theme::Container::Custom(ContainerType::Box.get_box()))
                         .padding(20),
-                    )
-                    .push(
-                        container(column!(
-                            text("Rappels")
-                                .width(Length::Fill)
-                                .horizontal_alignment(alignment::Horizontal::Center),
-                            row!(text(" ")),
-                            row!(text("Payer la facture d'eau du 11/04/23"))
-                        ))
-                        .style(theme::Container::Custom(ContainerType::Box.get_box()))
-                        .padding(20),
                     );
 
                 let right_side = Column::new()
@@ -227,7 +216,18 @@ impl Application for Grisked {
                         .style(theme::Container::Custom(ContainerType::Box.get_box()))
                         .padding(20),
                     )
-                    .width(Length::FillPortion(2));
+                    .width(Length::FillPortion(2))
+                    .push(
+                        container(column!(
+                            text("Rappels")
+                                .width(Length::Fill)
+                                .horizontal_alignment(alignment::Horizontal::Center),
+                            row!(text(" ")),
+                            row!(text("Payer la facture d'eau du 11/04/23"))
+                        ))
+                        .style(theme::Container::Custom(ContainerType::Box.get_box()))
+                        .padding(20),
+                    );
 
                 let container: Element<Message> =
                     container(row!(left_side, right_side).spacing(20))
