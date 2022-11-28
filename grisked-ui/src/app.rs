@@ -2,7 +2,7 @@ use iced::alignment;
 use iced::theme::Container;
 use iced::widget::{button, column, container, row, text, Column, Row};
 use iced::{executor, theme};
-use iced::{Application, Command, Element, Length, Settings, Theme};
+use iced::{Application, Command, Element, Length, Settings, Theme, Color};
 
 use grisked_profile::{
     models::{account::Account, bill::Bill},
@@ -111,36 +111,52 @@ impl Application for Grisked {
                     .push(
                         container(column!(
                             FontType::Title
-                                .get_text("Comptes récents".to_string(), FontFamily::IndieFlower)
+                            .get_text("Comptes récents".to_string(), FontFamily::IndieFlower)
                                 .width(Length::Fill)
+                                .style(Color::from([0.2235, 0.0, 0.5294]))
+                                .size(30)
                                 .horizontal_alignment(alignment::Horizontal::Left),
                             {
                                 let mut column = Column::new().spacing(25);
                                 for account in &self.profile.accounts {
                                     column = column.push(column!(
                                         row!(
+                                            text("• ").size(30).vertical_alignment(alignment::Vertical::Center).height(Length::Units(25)),
                                             FontType::Text
-                                                .get_text(account.name.clone(), FontFamily::Kanit),
+                                                .get_text(account.name.clone(), FontFamily::Kanit).size(25),
                                             FontType::Text
                                                 .get_text(
-                                                    format!("{}€", &account.get_account_balance()),
+                                                    format!("{:0.2} €", &account.get_account_balance()),
                                                     FontFamily::Kanit
-                                                )
-                                                .horizontal_alignment(alignment::Horizontal::Right)
+                                                ).size(25)
+                                            .horizontal_alignment(alignment::Horizontal::Right)
+                                            .width(Length::Fill)
                                         ),
                                         {
                                             let mut c_bills = Column::new();
                                             for bill in &account.bills {
                                                 c_bills = c_bills.push(
                                                     row!(
+                                                        text("• ").size(30).vertical_alignment(alignment::Vertical::Center).height(Length::Units(20)),
                                                         FontType::Text.get_text(
                                                             bill.name.clone(),
                                                             FontFamily::Kanit
                                                         ),
-                                                        FontType::Text.get_text(
-                                                            format!("{}€", &bill.price),
-                                                            FontFamily::Kanit
-                                                        )
+                                                        if bill.price < 0.0 {
+                                                            FontType::Text.get_text(
+                                                                format!("{:0.2} €", &bill.price),
+                                                                FontFamily::Kanit
+                                                            )
+                                                            .style(Color::from([0.5, 0.0, 0.0]))
+                                                        } else {
+                                                            FontType::Text.get_text(
+                                                                format!("+{:0.2} €", &bill.price),
+                                                                FontFamily::Kanit
+                                                            )
+                                                            .style(Color::from([0.0, 0.5, 0.0]))
+                                                        }
+                                                        .horizontal_alignment(alignment::Horizontal::Right)
+                                                        .width(Length::Fill)
                                                     )
                                                     .padding([0, 0, 0, 20]),
                                                 );

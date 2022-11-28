@@ -8,4 +8,4 @@ edition = "2021"
 
 [dependencies]
 iced = { git = "https://github.com/iced-rs/iced", feature = ["image"] }
-grisked-profile = { path = "../grisked-profile" } 
+grisked-profile = { path = "../grisked-profile" }
