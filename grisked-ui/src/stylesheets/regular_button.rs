@@ -42,9 +42,9 @@ const IGNORED_APPEARANCE: Appearance = Appearance {
 };
 
 #[derive(Default)]
-pub struct SidebarSelectedButton;
+pub struct SelectedButton;
 
-impl StyleSheet for SidebarSelectedButton {
+impl StyleSheet for SelectedButton {
     type Style = Theme;
 
     fn active(&self, _style: &Self::Style) -> Appearance {
@@ -65,9 +65,9 @@ impl StyleSheet for SidebarSelectedButton {
 }
 
 #[derive(Default)]
-pub struct SidebarIgnoredButton;
+pub struct IgnoredButton;
 
-impl StyleSheet for SidebarIgnoredButton {
+impl StyleSheet for IgnoredButton {
     type Style = Theme;
 
     fn active(&self, _style: &Self::Style) -> Appearance {

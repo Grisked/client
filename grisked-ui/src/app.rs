@@ -7,8 +7,8 @@ use iced::{Application, Color, Command, Element, Length, Settings, Theme};
 use grisked_profile::profile::Profile;
 
 use crate::entity::menu::*;
-use crate::entity::*;
 use crate::font::*;
+use crate::stylesheets::{ButtonType, ContainerType};
 use crate::{Language, Message};
 
 pub fn launch() -> iced::Result {
@@ -77,13 +77,11 @@ impl Application for Grisked {
                 .padding(10);
 
                 if &self.menu_type == option {
-                    button = button.style(theme::Button::Custom(Box::new(
-                        sidebar_button::SidebarSelectedButton,
-                    )))
+                    button =
+                        button.style(theme::Button::Custom(ButtonType::RegularSelected.get_box()));
                 } else {
-                    button = button.style(theme::Button::Custom(Box::new(
-                        sidebar_button::SidebarIgnoredButton,
-                    )))
+                    button =
+                        button.style(theme::Button::Custom(ButtonType::RegularIgnored.get_box()));
                 }
 
                 row.push(button)
@@ -96,7 +94,7 @@ impl Application for Grisked {
             .width(Length::Fill)
             .height(Length::FillPortion(1))
             .padding(20)
-            .style(theme::Container::Custom(Box::new(sidebar::Sidebar)))
+            .style(theme::Container::Custom(ContainerType::Sidebar.get_box()))
             .into();
 
         let context = match self.menu_type {
@@ -186,7 +184,7 @@ impl Application for Grisked {
                                 column
                             }
                         ))
-                        .style(theme::Container::Custom(Box::new(custom_box::CustomBox)))
+                        .style(theme::Container::Custom(ContainerType::Box.get_box()))
                         .padding(20),
                     )
                     .push(
@@ -197,7 +195,7 @@ impl Application for Grisked {
                             row!(text(" ")),
                             row!(text("Prêt de la 4090 RTX"), text("834€")).spacing(20),
                         ))
-                        .style(theme::Container::Custom(Box::new(custom_box::CustomBox)))
+                        .style(theme::Container::Custom(ContainerType::Box.get_box()))
                         .padding(20),
                     )
                     .push(
@@ -208,7 +206,7 @@ impl Application for Grisked {
                             row!(text(" ")),
                             row!(text("Payer la facture d'eau du 11/04/23"))
                         ))
-                        .style(theme::Container::Custom(Box::new(custom_box::CustomBox)))
+                        .style(theme::Container::Custom(ContainerType::Box.get_box()))
                         .padding(20),
                     );
 
@@ -226,7 +224,7 @@ impl Application for Grisked {
                             text("[] Sports"),
                             text("[] Alimentation"),
                         ))
-                        .style(theme::Container::Custom(Box::new(custom_box::CustomBox)))
+                        .style(theme::Container::Custom(ContainerType::Box.get_box()))
                         .padding(20),
                     )
                     .width(Length::FillPortion(2));
@@ -270,7 +268,7 @@ impl Application for Grisked {
                                 .width(Length::Fill)
                                 .size(15)),
                         ))
-                        .style(Container::Box)
+                        .style(theme::Container::Custom(ContainerType::Box.get_box()))
                         .padding(20),
                     )
                     .push(
@@ -293,7 +291,7 @@ impl Application for Grisked {
                                 .width(Length::Fill)
                                 .size(15)),
                         ))
-                        .style(Container::Box)
+                        .style(theme::Container::Custom(ContainerType::Box.get_box()))
                         .padding(20),
                     )
                     .push(
@@ -365,18 +363,18 @@ impl Application for Grisked {
                 container(content)
                     .width(Length::Fill)
                     .height(Length::Fill)
-                    .style(theme::Container::Custom(Box::new(
-                        background::AppBackground,
-                    )))
+                    .style(theme::Container::Custom(
+                        ContainerType::Background.get_box(),
+                    ))
                     .into()
             }
             None => container(sidebar_container)
                 .width(Length::Fill)
                 .height(Length::Fill)
                 .padding(20)
-                .style(theme::Container::Custom(Box::new(
-                    background::AppBackground,
-                )))
+                .style(theme::Container::Custom(
+                    ContainerType::Background.get_box(),
+                ))
                 .into(),
         }
     }
