@@ -4,10 +4,7 @@ use iced::widget::{button, column, container, row, text, Column, Row};
 use iced::{executor, theme};
 use iced::{Application, Command, Element, Length, Settings, Theme, Color};
 
-use grisked_profile::{
-    models::{account::Account, bill::Bill},
-    profile::Profile,
-};
+use grisked_profile::profile::Profile;
 
 use crate::entity::menu::*;
 use crate::font::*;
@@ -38,14 +35,7 @@ impl Application for Grisked {
     type Flags = ();
 
     fn new(_flags: ()) -> (Self, Command<Message>) {
-        let mut grisked = Grisked::default();
-        let bills = vec![
-            Bill::new(1, "Clavier Gaming".to_string(), -140.0, 120),
-            Bill::new(2, "Fiverr".to_string(), 220.0, 120),
-        ];
-        let account = Account::new("Compte Commun", 320.0, bills);
-
-        grisked.profile.accounts.push(account);
+        let grisked = Grisked::default();
 
         (grisked, Command::none())
     }
