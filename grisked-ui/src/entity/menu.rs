@@ -30,18 +30,18 @@ impl MenuType {
     pub fn get_name(&self, language: &Language) -> String {
         match language {
             Language::EN => match self {
-                Self::Dashboard => "Dashboard".to_string(),
-                Self::Accounts => "Accounts".to_string(),
-                Self::Deadlines => "Deadlines".to_string(),
-                Self::Charts => "Charts".to_string(),
-                Self::Backup => "Backup".to_string(),
+                Self::Dashboard => "DASHBOARD".to_string(),
+                Self::Accounts => "ACCOUNT".to_string(),
+                Self::Deadlines => "DEADLINES".to_string(),
+                Self::Charts => "CHARTS".to_string(),
+                Self::Backup => "BACKUP".to_string(),
             },
             Language::FR => match self {
-                Self::Dashboard => "Dashboard".to_string(),
-                Self::Accounts => "Comptes".to_string(),
-                Self::Deadlines => "Echéances".to_string(),
-                Self::Charts => "Graphiques".to_string(),
-                Self::Backup => "Sauvegarde".to_string(),
+                Self::Dashboard => "DASHBOARD".to_string(),
+                Self::Accounts => "COMPTES".to_string(),
+                Self::Deadlines => "ECHÉANCES".to_string(),
+                Self::Charts => "GRAPHIQUES".to_string(),
+                Self::Backup => "SAUVEGARDE".to_string(),
             },
         }
     }
