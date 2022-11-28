@@ -8,7 +8,7 @@ pub enum Message {
     MenuChanged(entity::menu::MenuType),
 }
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub enum Language {
     #[default]
     EN,

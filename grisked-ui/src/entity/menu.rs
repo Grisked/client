@@ -1,10 +1,6 @@
-use iced::{
-    alignment,
-    widget::{text, Text},
-    Font, Length,
-};
+use iced::widget::Text;
 
-use crate::Language;
+use crate::{font::icon, Language};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum MenuType {
@@ -45,18 +41,4 @@ impl MenuType {
             },
         }
     }
-}
-
-// Fonts
-const ICONS: Font = Font::External {
-    name: "Icons",
-    bytes: include_bytes!("../../../fonts/NotoEmoji-Regular.ttf"),
-};
-
-pub fn icon(unicode: char) -> Text<'static> {
-    text(unicode.to_string())
-        .font(ICONS)
-        .width(Length::Units(20))
-        .horizontal_alignment(alignment::Horizontal::Center)
-        .size(20)
 }

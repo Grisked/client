@@ -1,7 +1,22 @@
 use iced::{
+    alignment,
     widget::{text, Text},
-    Font,
+    Font, Length,
 };
+
+// Fonts
+const ICONS: Font = Font::External {
+    name: "Icons",
+    bytes: include_bytes!("../../fonts/NotoEmoji-Regular.ttf"),
+};
+
+pub fn icon(unicode: char) -> Text<'static> {
+    text(unicode.to_string())
+        .font(ICONS)
+        .width(Length::Units(20))
+        .horizontal_alignment(alignment::Horizontal::Center)
+        .size(20)
+}
 
 pub enum FontFamily {
     Kanit,

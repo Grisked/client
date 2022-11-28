@@ -1,14 +1,15 @@
 use iced::alignment;
 use iced::theme::Container;
-use iced::widget::{button, column, container, row, text, Column, Row};
+use iced::widget::{button, column, container, row, text, Column};
 use iced::{executor, theme};
-use iced::{Application, Color, Command, Element, Length, Settings, Theme};
+use iced::{Application, Command, Element, Length, Settings, Theme};
 
 use grisked_profile::profile::Profile;
 
 use crate::entity::menu::*;
-use crate::font::*;
-use crate::stylesheets::{ButtonType, ContainerType};
+use crate::entity::recent_accounts::recent_accounts;
+use crate::entity::sidebar::sidebar_container;
+use crate::stylesheets::ContainerType;
 use crate::{Language, Message};
 
 pub fn launch() -> iced::Result {
@@ -53,140 +54,14 @@ impl Application for Grisked {
     }
 
     fn view(&self) -> Element<Message> {
-        let mut sidebar = [
-            MenuType::Dashboard,
-            MenuType::Accounts,
-            MenuType::Charts,
-            MenuType::Deadlines,
-            MenuType::Backup,
-        ]
-        .iter()
-        .fold(
-            Row::new()
-                .spacing(10)
-                .height(Length::FillPortion(1))
-                .width(Length::Fill),
-            |row, option| {
-                let mut button = button(
-                    row![FontType::Header
-                        .get_text(option.get_name(&self.language), FontFamily::Kanit)
-                        .size(26)]
-                    .spacing(10),
-                )
-                .on_press(crate::Message::MenuChanged(*option))
-                .padding(10);
-
-                if &self.menu_type == option {
-                    button =
-                        button.style(theme::Button::Custom(ButtonType::RegularSelected.get_box()));
-                } else {
-                    button =
-                        button.style(theme::Button::Custom(ButtonType::RegularIgnored.get_box()));
-                }
-
-                row.push(button)
-            },
-        );
-
-        sidebar = sidebar.push(icon('💰'));
-
-        let sidebar_container: Element<Message> = container(sidebar)
-            .width(Length::Fill)
-            .height(Length::FillPortion(1))
-            .padding(20)
-            .style(theme::Container::Custom(ContainerType::Sidebar.get_box()))
-            .into();
+        let sidebar_container = sidebar_container(&self.menu_type, self.language.clone());
 
         let context = match self.menu_type {
             MenuType::Dashboard => {
                 let left_side = Column::new()
                     .width(Length::FillPortion(2))
                     .spacing(10)
-                    .push(
-                        container(column!(
-                            FontType::Title
-                                .get_text("Comptes récents".to_string(), FontFamily::IndieFlower)
-                                .width(Length::Fill)
-                                .style(Color::from([0.2235, 0.0, 0.5294]))
-                                .size(30)
-                                .horizontal_alignment(alignment::Horizontal::Left),
-                            {
-                                let mut column = Column::new().spacing(25);
-                                for account in &self.profile.accounts {
-                                    column = column.push(column!(
-                                        row!(
-                                            text("• ")
-                                                .size(20)
-                                                .vertical_alignment(alignment::Vertical::Center)
-                                                .height(Length::Units(25)),
-                                            FontType::TextBold
-                                                .get_text(account.name.clone(), FontFamily::Kanit)
-                                                .size(20),
-                                            FontType::TextBold
-                                                .get_text(
-                                                    format!(
-                                                        "{:0.2} €",
-                                                        &account.get_account_balance()
-                                                    ),
-                                                    FontFamily::Kanit
-                                                )
-                                                .size(20)
-                                                .horizontal_alignment(alignment::Horizontal::Right)
-                                                .width(Length::Fill)
-                                        ),
-                                        {
-                                            let mut c_bills = Column::new();
-                                            for bill in &account.bills {
-                                                c_bills = c_bills.push(
-                                                    row!(
-                                                        text("• ")
-                                                            .size(20)
-                                                            .vertical_alignment(
-                                                                alignment::Vertical::Center
-                                                            )
-                                                            .height(Length::Units(20)),
-                                                        FontType::Text.get_text(
-                                                            bill.name.clone(),
-                                                            FontFamily::Kanit
-                                                        ),
-                                                        {
-                                                            let mut text = FontType::Text.get_text(
-                                                                bill.pretty_price(),
-                                                                FontFamily::Kanit,
-                                                            );
-                                                            if bill.price < 0.0 {
-                                                                text = text.style(Color::from([
-                                                                    (189.0 / 255.0),
-                                                                    0.0,
-                                                                    0.0,
-                                                                ]))
-                                                            } else {
-                                                                text = text.style(Color::from([
-                                                                    0.0,
-                                                                    (134.0 / 255.0),
-                                                                    0.0,
-                                                                ]))
-                                                            }
-                                                            text
-                                                        }
-                                                        .horizontal_alignment(
-                                                            alignment::Horizontal::Right
-                                                        )
-                                                        .width(Length::Fill)
-                                                    )
-                                                    .padding([0, 0, 0, 20]),
-                                                );
-                                            }
-                                            c_bills
-                                        }
-                                    ))
-                                }
-                                column
-                            }
-                        ))
-                        .style(theme::Container::Custom(ContainerType::Box.get_box()))
-                        .padding(20),
-                    )
+                    .push(recent_accounts(&self.profile))
                     .push(
                         container(column!(
                             text("Echéances en cours")
