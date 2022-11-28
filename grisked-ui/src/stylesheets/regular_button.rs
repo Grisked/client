@@ -75,7 +75,7 @@ impl StyleSheet for IgnoredButton {
     }
 
     fn hovered(&self, _style: &Self::Style) -> Appearance {
-        IGNORED_APPEARANCE
+        SELECTED_APPEARANCE
     }
 
     fn pressed(&self, _style: &Self::Style) -> Appearance {
