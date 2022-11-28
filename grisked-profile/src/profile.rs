@@ -61,7 +61,7 @@ impl Profile {
     pub fn save(&self) {
         std::fs::write(
             &self.path.as_ref().unwrap(),
-            serde_json::to_string_pretty(&self).unwrap(),
+            serde_json::to_string(&self).unwrap(),
         )
         .unwrap();
     }

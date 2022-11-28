@@ -15,7 +15,6 @@ use crate::{Language, Message};
 pub fn launch() -> iced::Result {
     Grisked::run(Settings {
         antialiasing: true,
-        default_font: Some(include_bytes!("../../fonts/Kanit/200.ttf")),
         ..Settings::default()
     })
 }
