@@ -1,28 +1,54 @@
+use std::fs::File;
+
 use serde::{Deserialize, Serialize};
 
 use crate::models::{account::Account, settings::Settings};
 
-#[derive(Deserialize, Serialize, Default)]
+#[derive(Serialize, Deserialize)]
 pub struct Profile {
-    profile_path: String,
+    #[serde(skip_serializing)]
+    path: String,
     settings: Settings,
     pub accounts: Vec<Account>,
 }
 
-impl Profile {
-    pub fn load_profile(_profile_path: &str) -> Option<Self> {
-        todo!()
-    }
+impl Default for Profile {
+    fn default() -> Self {
+        let profile = Self::load_profile("profile.json".to_string());
 
-    pub fn default_profile() -> Self {
-        Self {
-            profile_path: "profile.json".to_string(),
-            settings: Settings::default(),
-            accounts: Vec::new(),
+        match profile {
+            Ok(profile) => profile,
+            Err(err) => {
+                println!("Error = {:?}", err);
+                let profile = Self {
+                    path: "profile.json".to_string(),
+                    settings: Settings::default(),
+                    accounts: Vec::new(),
+                };
+                profile.save();
+                profile
+            }
         }
     }
+}
 
-    pub fn save_all(&self) {}
+impl Profile {
+    pub fn load_profile(profile_path: String) -> Result<Self, String> {
+        let file = File::open(&profile_path);
+        if file.is_err() {
+            return Err(format!("{}", file.unwrap_err()));
+        }
+        let file = file.unwrap();
+        let profile = serde_json::from_reader(file);
+        if profile.is_err() {
+            return Err(format!("{:?}", profile.err().unwrap()));
+        }
+        let mut profile: Profile = profile.unwrap();
+        profile.path = profile_path;
+        Ok(profile)
+    }
 
-    pub fn save_settings(&self) {}
+    pub fn save(&self) {
+        std::fs::write(&self.path, serde_json::to_string_pretty(&self).unwrap()).unwrap();
+    }
 }
