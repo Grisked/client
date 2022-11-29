@@ -10,7 +10,15 @@
     <p>It's time to drop Microsoft Money / Excel, here is GRISKED.</p>
 </h2>
 
-# Building the software
+# Building the software [2 WAYS]
+
+> ## 1st way
+
+```rust
+cargo run --release
+```
+
+> ## 2nd way
 
 ```rust
 cargo build --release
