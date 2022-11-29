@@ -1,26 +1,21 @@
-use crate::{
-    models::{account::Account, settings::Settings},
-    serde_utils::{load_json, save_json},
-};
+use crate::models::{data::Data, settings::Settings};
 
 pub struct Profile {
-    path: Option<String>,
     settings: Settings,
-    pub accounts: Vec<Account>,
+    pub data: Data,
 }
 
 impl Default for Profile {
     fn default() -> Self {
-        let profile = Self::load("profile.json".to_string(), "settings.json".to_string());
+        let profile = Self::load("data.json".to_string(), "settings.json".to_string());
 
         match profile {
             Ok(profile) => profile,
             Err(err) => {
                 println!("Error = {:?}", err);
                 let profile = Self {
-                    path: Some("profile.json".to_string()),
                     settings: Settings::default(),
-                    accounts: Vec::new(),
+                    data: Data::default(),
                 };
                 profile.save();
                 profile
@@ -30,14 +25,10 @@ impl Default for Profile {
 }
 
 impl Profile {
-    pub fn load(profile_path: String, settings_path: String) -> Result<Self, String> {
+    pub fn load(data_path: String, settings_path: String) -> Result<Self, String> {
         match Settings::load(settings_path) {
-            Ok(settings) => match load_json::<Vec<Account>>(profile_path.clone()) {
-                Ok(accounts) => Ok(Self {
-                    path: Some(profile_path),
-                    settings,
-                    accounts,
-                }),
+            Ok(settings) => match Data::load(data_path) {
+                Ok(data) => Ok(Self { settings, data }),
                 Err(err) => Err(err),
             },
             Err(err) => Err(err),
@@ -45,15 +36,15 @@ impl Profile {
     }
 
     pub fn save(&self) {
-        self.settings.save();
-        self.save_accounts();
+        self.save_settings();
+        self.save_data();
     }
 
     pub fn save_settings(&self) {
         self.settings.save();
     }
 
-    pub fn save_accounts(&self) {
-        save_json::<Vec<Account>>(self.path.as_ref().unwrap(), &self.accounts);
+    pub fn save_data(&self) {
+        self.data.save();
     }
 }

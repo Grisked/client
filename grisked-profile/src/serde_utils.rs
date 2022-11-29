@@ -1,4 +1,4 @@
-use std::{fs::File, io::Read};
+use std::fs::File;
 
 use serde::{de::DeserializeOwned, Serialize};
 
@@ -7,12 +7,11 @@ pub fn load_json<T: DeserializeOwned>(file_path: String) -> Result<T, String> {
     if file.is_err() {
         return Err(format!("{}", file.unwrap_err()));
     }
-    let mut file = file.unwrap();
+    let file = file.unwrap();
     let settings = serde_json::from_reader(&file);
     if settings.is_err() {
-        let mut content = String::new();
-        match file.read_to_string(&mut content) {
-            Ok(_) => {
+        match std::fs::read_to_string(&file_path) {
+            Ok(content) => {
                 let _ = std::fs::write(format!("{}.old", &file_path), content);
             }
             Err(_) => {}

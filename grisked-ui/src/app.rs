@@ -51,6 +51,10 @@ impl Application for Grisked {
             Message::KeyPressed(keycode, modifiers) => {
                 handler::zoom::handle(keycode, modifiers, &mut self.view)
             }
+            Message::SaveRequested(_) => {
+                println!("Saving json files !");
+                self.profile.save();
+            }
         }
         Command::none()
     }

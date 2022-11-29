@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 use iced::keyboard::{KeyCode, Modifiers};
 
 pub mod app;
@@ -11,6 +13,7 @@ pub mod view;
 pub enum Message {
     MenuChanged(entity::menu::MenuType),
     KeyPressed(KeyCode, Modifiers),
+    SaveRequested(Instant),
 }
 
 #[derive(Default, Clone)]

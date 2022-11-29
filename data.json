@@ -1,0 +1,1 @@
+{"accounts":[{"name":"Compte Commun","default_balance":320.0,"bills":[{"name":"Clavier Gaming","price":-140.0,"due_date":120,"label_id":null},{"name":"Fiverr","price":220.0,"due_date":120,"label_id":null}]},{"name":"Livret A","default_balance":80.0,"bills":[{"name":"Grand mère","price":120.0,"due_date":120,"label_id":null}]}],"labels":[]}

@@ -1,1 +1,0 @@
-[{"name":"Compte Commun","default_balance":320.0,"bills":[{"id":1,"name":"Clavier Gaming","price":-140.0,"due_date":120},{"id":2,"name":"Fiverr","price":220.0,"due_date":120}]},{"name":"Livret A","default_balance":80.0,"bills":[{"id":1,"name":"Grand mère","price":120.0,"due_date":120}]}]

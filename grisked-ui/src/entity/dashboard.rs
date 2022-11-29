@@ -108,7 +108,7 @@ fn recent_accounts(profile: &Profile, view: &View) -> Container<'static, Message
         .on_press(Message::MenuChanged(MenuType::Accounts)),
         {
             let mut column = Column::new().spacing(25);
-            for account in &profile.accounts {
+            for account in &profile.data.accounts {
                 column = column.push(get_account(account, view))
             }
             column

@@ -15,11 +15,9 @@ pub struct Settings {
 
 impl Default for Settings {
     fn default() -> Self {
-        let settings = load_json::<Self>("settings.json".to_string());
-
-        match settings {
+        match load_json::<Self>("settings.json".to_string()) {
             Ok(mut settings) => {
-                settings.path = Some("profile.json".to_string());
+                settings.path = Some("settings.json".to_string());
                 settings
             }
             Err(err) => {
@@ -40,13 +38,6 @@ impl Default for Settings {
 }
 
 impl Settings {
-    pub fn new(path: String, currencies: Vec<Currency>) -> Self {
-        Self {
-            path: Some(path),
-            currencies,
-        }
-    }
-
     pub fn add_currency(&mut self, currency: Currency) {
         if !self.currencies.contains(&currency) {
             self.currencies.push(currency);
