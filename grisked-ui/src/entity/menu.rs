@@ -17,11 +17,12 @@ impl MenuType {
     pub fn get_container(
         self,
         profile: &Profile,
-        language: Language,
+        _language: Language,
         view: View,
     ) -> Option<Container<Message>> {
         match self {
             MenuType::Dashboard => Some(entity::dashboard(profile, view)),
+            MenuType::Accounts => Some(entity::accounts(profile, view)),
             MenuType::Backup => Some(entity::backup(profile, view)),
             _ => None,
         }
