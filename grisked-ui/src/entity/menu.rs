@@ -27,7 +27,7 @@ impl MenuType {
         match language {
             Language::EN => match self {
                 Self::Dashboard => "DASHBOARD".to_string(),
-                Self::Accounts => "ACCOUNT".to_string(),
+                Self::Accounts => "ACCOUNTS".to_string(),
                 Self::Deadlines => "DEADLINES".to_string(),
                 Self::Charts => "CHARTS".to_string(),
                 Self::Backup => "BACKUP".to_string(),

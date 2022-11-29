@@ -1,6 +1,6 @@
-use iced::alignment;
 use iced::theme::Container;
 use iced::widget::{button, column, container, row, text, Column};
+use iced::{alignment, subscription, Subscription};
 use iced::{executor, theme};
 use iced::{Application, Command, Element, Length, Settings, Theme};
 
@@ -9,8 +9,9 @@ use grisked_profile::profile::Profile;
 use crate::entity::menu::*;
 use crate::entity::recent_accounts::recent_accounts;
 use crate::entity::sidebar::sidebar_container;
-use crate::stylesheets::ContainerType;
-use crate::{Language, Message};
+use crate::stylesheet::ContainerType;
+use crate::view::View;
+use crate::{handler, Language, Message};
 
 pub fn launch() -> iced::Result {
     Grisked::run(Settings {
@@ -23,6 +24,7 @@ pub fn launch() -> iced::Result {
 struct Grisked {
     menu_type: MenuType,
     language: Language,
+    view: View,
     pub profile: Profile,
 }
 
@@ -48,19 +50,23 @@ impl Application for Grisked {
     fn update(&mut self, message: Message) -> Command<Message> {
         match message {
             Message::MenuChanged(menu_type) => self.menu_type = menu_type,
+            Message::KeyPressed(keycode, modifiers) => {
+                handler::zoom::handle(keycode, modifiers, &mut self.view)
+            }
         }
         Command::none()
     }
 
     fn view(&self) -> Element<Message> {
-        let sidebar_container = sidebar_container(&self.menu_type, self.language.clone());
+        let sidebar_container =
+            sidebar_container(&self.menu_type, self.language.clone(), self.view.clone());
 
         let context = match self.menu_type {
             MenuType::Dashboard => {
                 let left_side = Column::new()
-                    .width(Length::FillPortion(2))
+                    .width(Length::FillPortion(1))
                     .spacing(10)
-                    .push(recent_accounts(&self.profile))
+                    .push(recent_accounts(&self.profile, self.view.clone()))
                     .push(
                         container(column!(
                             text("Echéances en cours")
@@ -74,7 +80,7 @@ impl Application for Grisked {
                     );
 
                 let right_side = Column::new()
-                    .width(Length::FillPortion(2))
+                    .width(Length::FillPortion(3))
                     .spacing(10)
                     .push(
                         container(column!(
@@ -251,5 +257,21 @@ impl Application for Grisked {
                 ))
                 .into(),
         }
+    }
+
+    fn subscription(&self) -> Subscription<Self::Message> {
+        use iced::event::Event;
+        use iced::keyboard;
+
+        subscription::events_with(|event, _status| match event {
+            Event::Keyboard(e) => match e {
+                keyboard::Event::KeyPressed {
+                    key_code,
+                    modifiers,
+                } => Some(Message::KeyPressed(key_code, modifiers)),
+                _ => None,
+            },
+            _ => None,
+        })
     }
 }

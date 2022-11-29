@@ -1,18 +1,23 @@
-
 use iced::{
     theme,
-    widget::{button, container, row, Container, Row}, Length,
+    widget::{button, container, row, Container, Row},
+    Length,
 };
 
 use crate::{
     font::{icon, FontFamily, FontType},
-    stylesheets::{ButtonType, ContainerType},
+    stylesheet::{ButtonType, ContainerType},
+    view::{View, ViewSize},
     Language, Message,
 };
 
 use super::menu::MenuType;
 
-pub fn sidebar_container(menu_type: &MenuType, language: Language) -> Container<Message> {
+pub fn sidebar_container(
+    menu_type: &MenuType,
+    language: Language,
+    view: View,
+) -> Container<Message> {
     let mut sidebar = [
         MenuType::Dashboard,
         MenuType::Accounts,
@@ -30,7 +35,7 @@ pub fn sidebar_container(menu_type: &MenuType, language: Language) -> Container<
             let mut button = button(
                 row![FontType::Header
                     .get_text(option.get_name(&language), FontFamily::Kanit)
-                    .size(26)]
+                    .size(ViewSize::Header.get_size(&view))]
                 .spacing(10),
             )
             .on_press(crate::Message::MenuChanged(*option))
