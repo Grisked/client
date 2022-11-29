@@ -1,6 +1,7 @@
 use iced::{widget, Theme};
 
 mod background;
+mod box_button;
 mod custom_box;
 mod regular_button;
 mod sidebar;
@@ -8,12 +9,14 @@ mod sidebar;
 pub enum ButtonType {
     RegularSelected,
     RegularIgnored,
+    BoxIgnored,
 }
 
 impl ButtonType {
     pub fn get_box(&self) -> Box<dyn widget::button::StyleSheet<Style = Theme> + 'static> {
         match self {
             Self::RegularSelected => Box::new(regular_button::SelectedButton),
+            Self::BoxIgnored => Box::new(box_button::IgnoredButton),
             Self::RegularIgnored => Box::new(regular_button::IgnoredButton),
         }
     }

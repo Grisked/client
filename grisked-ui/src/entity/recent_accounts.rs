@@ -1,25 +1,30 @@
 use grisked_profile::profile::Profile;
 use iced::{
     alignment, theme,
-    widget::{column, container, row, text, Column, Container},
+    widget::{button, column, container, row, text, Column, Container},
     Color, Length,
 };
 
 use crate::{
+    entity::menu::MenuType,
     font::{FontFamily, FontType},
-    stylesheet::ContainerType,
+    stylesheet::{ButtonType, ContainerType},
     view::{View, ViewSize},
     Message,
 };
 
 pub fn recent_accounts(profile: &Profile, view: View) -> Container<Message> {
     let container: Container<Message> = container(column!(
-        FontType::Title
-            .get_text("Comptes récents".to_string(), FontFamily::IndieFlower)
-            .width(Length::Fill)
-            .style(Color::from([0.2235, 0.0, 0.5294]))
-            .size(ViewSize::Title.get_size(&view))
-            .horizontal_alignment(alignment::Horizontal::Left),
+        button(
+            FontType::Title
+                .get_text("Comptes récents".to_string(), FontFamily::IndieFlower)
+                .width(Length::Fill)
+                .style(Color::from([0.2235, 0.0, 0.5294]))
+                .size(ViewSize::Title.get_size(&view))
+                .horizontal_alignment(alignment::Horizontal::Left)
+        )
+        .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
+        .on_press(Message::MenuChanged(MenuType::Accounts)),
         {
             let mut column = Column::new().spacing(25);
             for account in &profile.accounts {
