@@ -6,7 +6,7 @@ pub fn handle(keycode: KeyCode, modifiers: Modifiers, view: &mut View) {
     if (keycode == KeyCode::Plus || keycode == KeyCode::Equals) && modifiers == Modifiers::CTRL {
         view.upscale();
     }
-    if keycode == KeyCode::Minus && modifiers == Modifiers::CTRL {
+    if (keycode == KeyCode::Minus || keycode == KeyCode::Key6) && modifiers == Modifiers::CTRL {
         view.downscale();
     }
 }
