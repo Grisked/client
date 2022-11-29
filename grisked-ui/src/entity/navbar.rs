@@ -53,11 +53,12 @@ pub fn navbar_container(
 
     sidebar = sidebar.push(icon('💰'));
 
-    let sidebar_container: Container<Message> = container(sidebar)
-        .width(Length::Fill)
-        .height(Length::FillPortion(1))
-        .padding(20)
-        .style(theme::Container::Custom(ContainerType::Sidebar.get_box()));
+    let sidebar_container: Container<Message> =
+        container(sidebar.align_items(iced::Alignment::Center))
+            .width(Length::Fill)
+            .height(Length::FillPortion(1))
+            .padding(20)
+            .style(theme::Container::Custom(ContainerType::Sidebar.get_box()));
 
     sidebar_container
 }

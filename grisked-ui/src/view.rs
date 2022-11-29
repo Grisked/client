@@ -15,7 +15,7 @@ impl View {
     }
 
     pub fn upscale(&mut self) {
-        if self.zoom_modifier <= 2.6 {
+        if self.zoom_modifier <= 1.8 {
             self.zoom_modifier += 0.4;
         }
     }
