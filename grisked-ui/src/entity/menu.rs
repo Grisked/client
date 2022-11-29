@@ -17,9 +17,9 @@ impl MenuType {
     pub fn get_container(
         self,
         profile: &Profile,
-        _language: Language,
-        view: View,
-    ) -> Option<Container<Message>> {
+        _language: &Language,
+        view: &View,
+    ) -> Option<Container<'static, Message>> {
         match self {
             MenuType::Dashboard => Some(entity::dashboard(profile, view)),
             MenuType::Accounts => Some(entity::accounts(profile, view)),

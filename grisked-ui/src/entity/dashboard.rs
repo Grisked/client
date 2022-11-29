@@ -16,19 +16,19 @@ use crate::{
     Message,
 };
 
-pub fn dashboard(profile: &Profile, view: View) -> Container<Message> {
+pub fn dashboard(profile: &Profile, view: &View) -> Container<'static, Message> {
     let left_side = Column::new()
         .width(Length::FillPortion(1))
         .spacing(10)
-        .push(recent_accounts(profile, view.clone()))
-        .push(deadlines(profile, view.clone()));
+        .push(recent_accounts(profile, view))
+        .push(deadlines(profile, view));
 
     let right_side = Column::new()
         .width(Length::FillPortion(3))
         .spacing(10)
         .width(Length::FillPortion(2))
-        .push(spendings(profile, view.clone()))
-        .push(pins(profile, view.clone()));
+        .push(spendings(profile, view))
+        .push(pins(profile, view));
 
     let container: Container<Message> = container(row!(left_side, right_side).spacing(20))
         .height(Length::FillPortion(7))
@@ -38,7 +38,7 @@ pub fn dashboard(profile: &Profile, view: View) -> Container<Message> {
     container
 }
 
-fn get_bills(bills: &Vec<Bill>, view: View) -> Column<Message> {
+fn get_bills(bills: &Vec<Bill>, view: &View) -> Column<'static, Message> {
     let mut c_bills = Column::new();
     for bill in bills {
         c_bills = c_bills.push(
@@ -70,30 +70,30 @@ fn get_bills(bills: &Vec<Bill>, view: View) -> Column<Message> {
     c_bills
 }
 
-fn get_account(account: &Account, view: View) -> Column<Message> {
+fn get_account(account: &Account, view: &View) -> Column<'static, Message> {
     column!(
         row!(
             text("• ")
-                .size(ViewSize::Text.get_size(&view))
+                .size(ViewSize::Text.get_size(view))
                 .vertical_alignment(alignment::Vertical::Center)
                 .height(Length::Units(25)),
             FontType::TextBold
                 .get_text(account.name.clone(), FontFamily::Kanit)
-                .size(ViewSize::Text.get_size(&view)),
+                .size(ViewSize::Text.get_size(view)),
             FontType::TextBold
                 .get_text(
                     format!("{:0.2} €", &account.get_account_balance()),
                     FontFamily::Kanit
                 )
-                .size(ViewSize::Text.get_size(&view))
+                .size(ViewSize::Text.get_size(view))
                 .horizontal_alignment(alignment::Horizontal::Right)
                 .width(Length::Fill)
         ),
-        get_bills(&account.bills, view.clone())
+        get_bills(&account.bills, view)
     )
 }
 
-fn recent_accounts(profile: &Profile, view: View) -> Container<Message> {
+fn recent_accounts(profile: &Profile, view: &View) -> Container<'static, Message> {
     let container: Container<Message> = container(column!(
         button(
             FontType::Title
@@ -108,7 +108,7 @@ fn recent_accounts(profile: &Profile, view: View) -> Container<Message> {
         {
             let mut column = Column::new().spacing(25);
             for account in &profile.accounts {
-                column = column.push(get_account(account, view.clone()))
+                column = column.push(get_account(account, view))
             }
             column
         },
@@ -118,7 +118,7 @@ fn recent_accounts(profile: &Profile, view: View) -> Container<Message> {
     container
 }
 
-fn deadlines(_profile: &Profile, _view: View) -> Container<Message> {
+fn deadlines(_profile: &Profile, _view: &View) -> Container<'static, Message> {
     container(column!(
         text("Echéances en cours")
             .width(Length::Fill)
@@ -130,7 +130,7 @@ fn deadlines(_profile: &Profile, _view: View) -> Container<Message> {
     .padding(20)
 }
 
-fn spendings(_profile: &Profile, _view: View) -> Container<Message> {
+fn spendings(_profile: &Profile, _view: &View) -> Container<'static, Message> {
     container(column!(
         text("Dépenses du mois")
             .width(Length::Fill)
@@ -145,7 +145,7 @@ fn spendings(_profile: &Profile, _view: View) -> Container<Message> {
     .padding(20)
 }
 
-fn pins(_profile: &Profile, _view: View) -> Container<Message> {
+fn pins(_profile: &Profile, _view: &View) -> Container<'static, Message> {
     container(column!(
         text("Rappels")
             .width(Length::Fill)

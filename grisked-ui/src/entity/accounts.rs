@@ -7,7 +7,7 @@ use iced::{
 
 use crate::{stylesheet::ContainerType, view::View, Message};
 
-pub fn accounts(profile: &Profile, view: View) -> Container<Message> {
+pub fn accounts(profile: &Profile, view: &View) -> Container<'static, Message> {
     let center = Column::new().spacing(10).push(list_accounts(profile, view));
 
     let container: Container<Message> = container(row!(center).spacing(20))
@@ -18,7 +18,7 @@ pub fn accounts(profile: &Profile, view: View) -> Container<Message> {
     container
 }
 
-fn list_accounts(_profile: &Profile, _view: View) -> Container<Message> {
+fn list_accounts(_profile: &Profile, _view: &View) -> Container<'static, Message> {
     container(column!(
         text("Comptes courants")
             .horizontal_alignment(alignment::Horizontal::Center)
