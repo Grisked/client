@@ -22,6 +22,7 @@ impl MenuType {
     ) -> Option<Container<Message>> {
         match self {
             MenuType::Dashboard => Some(entity::dashboard(profile, view)),
+            MenuType::Backup => Some(entity::backup(profile, view)),
             _ => None,
         }
     }
