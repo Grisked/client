@@ -1,17 +1,18 @@
+use iced::{
+    alignment, theme,
+    widget::{button, column, container, row, svg, text, Column, Container},
+    Color, Length,
+};
+
 use grisked_profile::{
     models::{account::Account, bill::Bill},
     profile::Profile,
-};
-use iced::{
-    alignment, theme,
-    widget::{button, column, container, row, text, Column, Container},
-    Color, Length,
 };
 
 use crate::{
     entity::menu::MenuType,
     font::{FontFamily, FontType},
-    stylesheet::{ButtonType, ContainerType},
+    stylesheet::{draw_spendings, ButtonType, ContainerType},
     view::{View, ViewSize},
     Message,
 };
@@ -131,11 +132,13 @@ fn deadlines(_profile: &Profile, _view: &View) -> Container<'static, Message> {
 }
 
 fn spendings(_profile: &Profile, _view: &View) -> Container<'static, Message> {
+    let _ = draw_spendings::draw();
+
     container(column!(
         text("Dépenses du mois")
             .width(Length::Fill)
             .horizontal_alignment(alignment::Horizontal::Center),
-        row!(text(" ")),
+        container(svg(svg::Handle::from_path("assets/pie-chart.svg"))),
         text("[] Transports"),
         text("[] Informatique"),
         text("[] Sports"),

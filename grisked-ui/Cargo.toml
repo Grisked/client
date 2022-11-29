@@ -7,5 +7,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-iced = { version = "0.5.2", feature = ["image"] }
+iced = { version = "0.5.2", features = ["svg"] }
 grisked-profile = { path = "../grisked-profile" }
+plotters = { version = "0.3.4", default-features = false, features = ["full_palette", "svg_backend"] }

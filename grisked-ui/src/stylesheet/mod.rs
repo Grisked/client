@@ -1,5 +1,7 @@
 use iced::{widget, Theme};
 
+pub mod draw_spendings;
+
 mod background;
 mod box_button;
 mod custom_box;
