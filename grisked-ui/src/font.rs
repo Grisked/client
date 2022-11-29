@@ -126,9 +126,9 @@ impl FontType {
 
     fn get_font(&self, family: FontFamily) -> Font {
         match self {
-            Self::Header => FontSize::SemiBold.get_font(family),
-            Self::Title => FontSize::Medium.get_font(family),
-            Self::TextBold => FontSize::Regular.get_font(family),
+            Self::Header => FontSize::Bold.get_font(family),
+            Self::Title => FontSize::SemiBold.get_font(family),
+            Self::TextBold => FontSize::Medium.get_font(family),
             Self::Text => FontSize::Light.get_font(family),
         }
     }
