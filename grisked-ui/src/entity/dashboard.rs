@@ -1,4 +1,7 @@
-use grisked_profile::profile::Profile;
+use grisked_profile::{
+    models::{account::Account, bill::Bill},
+    profile::Profile,
+};
 use iced::{
     alignment, theme,
     widget::{button, column, container, row, text, Column, Container},
@@ -35,6 +38,61 @@ pub fn dashboard(profile: &Profile, view: View) -> Container<Message> {
     container
 }
 
+fn get_bills(bills: &Vec<Bill>, view: View) -> Column<Message> {
+    let mut c_bills = Column::new();
+    for bill in bills {
+        c_bills = c_bills.push(
+            row!(
+                text("• ")
+                    .size(ViewSize::Text.get_size(&view))
+                    .vertical_alignment(alignment::Vertical::Center)
+                    .height(Length::Units(20)),
+                FontType::Text
+                    .get_text(bill.name.clone(), FontFamily::Kanit)
+                    .size(ViewSize::Text.get_size(&view)),
+                {
+                    let mut text = FontType::Text
+                        .get_text(bill.pretty_price(), FontFamily::Kanit)
+                        .size(ViewSize::Text.get_size(&view));
+                    if bill.price < 0.0 {
+                        text = text.style(Color::from([(189.0 / 255.0), 0.0, 0.0]))
+                    } else {
+                        text = text.style(Color::from([0.0, (134.0 / 255.0), 0.0]))
+                    }
+                    text
+                }
+                .horizontal_alignment(alignment::Horizontal::Right)
+                .width(Length::Fill)
+            )
+            .padding([0, 0, 0, 20]),
+        );
+    }
+    c_bills
+}
+
+fn get_account(account: &Account, view: View) -> Column<Message> {
+    column!(
+        row!(
+            text("• ")
+                .size(ViewSize::Text.get_size(&view))
+                .vertical_alignment(alignment::Vertical::Center)
+                .height(Length::Units(25)),
+            FontType::TextBold
+                .get_text(account.name.clone(), FontFamily::Kanit)
+                .size(ViewSize::Text.get_size(&view)),
+            FontType::TextBold
+                .get_text(
+                    format!("{:0.2} €", &account.get_account_balance()),
+                    FontFamily::Kanit
+                )
+                .size(ViewSize::Text.get_size(&view))
+                .horizontal_alignment(alignment::Horizontal::Right)
+                .width(Length::Fill)
+        ),
+        get_bills(&account.bills, view.clone())
+    )
+}
+
 fn recent_accounts(profile: &Profile, view: View) -> Container<Message> {
     let container: Container<Message> = container(column!(
         button(
@@ -50,58 +108,7 @@ fn recent_accounts(profile: &Profile, view: View) -> Container<Message> {
         {
             let mut column = Column::new().spacing(25);
             for account in &profile.accounts {
-                column = column.push(column!(
-                    row!(
-                        text("• ")
-                            .size(ViewSize::Text.get_size(&view))
-                            .vertical_alignment(alignment::Vertical::Center)
-                            .height(Length::Units(25)),
-                        FontType::TextBold
-                            .get_text(account.name.clone(), FontFamily::Kanit)
-                            .size(ViewSize::Text.get_size(&view)),
-                        FontType::TextBold
-                            .get_text(
-                                format!("{:0.2} €", &account.get_account_balance()),
-                                FontFamily::Kanit
-                            )
-                            .size(ViewSize::Text.get_size(&view))
-                            .horizontal_alignment(alignment::Horizontal::Right)
-                            .width(Length::Fill)
-                    ),
-                    {
-                        let mut c_bills = Column::new();
-                        for bill in &account.bills {
-                            c_bills = c_bills.push(
-                                row!(
-                                    text("• ")
-                                        .size(ViewSize::Text.get_size(&view))
-                                        .vertical_alignment(alignment::Vertical::Center)
-                                        .height(Length::Units(20)),
-                                    FontType::Text
-                                        .get_text(bill.name.clone(), FontFamily::Kanit)
-                                        .size(ViewSize::Text.get_size(&view)),
-                                    {
-                                        let mut text = FontType::Text
-                                            .get_text(bill.pretty_price(), FontFamily::Kanit)
-                                            .size(ViewSize::Text.get_size(&view));
-                                        if bill.price < 0.0 {
-                                            text =
-                                                text.style(Color::from([(189.0 / 255.0), 0.0, 0.0]))
-                                        } else {
-                                            text =
-                                                text.style(Color::from([0.0, (134.0 / 255.0), 0.0]))
-                                        }
-                                        text
-                                    }
-                                    .horizontal_alignment(alignment::Horizontal::Right)
-                                    .width(Length::Fill)
-                                )
-                                .padding([0, 0, 0, 20]),
-                            );
-                        }
-                        c_bills
-                    }
-                ))
+                column = column.push(get_account(account, view.clone()))
             }
             column
         },

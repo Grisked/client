@@ -1,7 +1,7 @@
 use grisked_profile::profile::Profile;
 use iced::{
     alignment, theme,
-    widget::{button, column, container, row, text, Column, Container},
+    widget::{column, container, row, text, Column, Container},
     Length,
 };
 
