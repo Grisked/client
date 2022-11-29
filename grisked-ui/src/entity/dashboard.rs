@@ -13,7 +13,29 @@ use crate::{
     Message,
 };
 
-pub fn recent_accounts(profile: &Profile, view: View) -> Container<Message> {
+pub fn dashboard(profile: &Profile, view: View) -> Container<Message> {
+    let left_side = Column::new()
+        .width(Length::FillPortion(1))
+        .spacing(10)
+        .push(recent_accounts(profile, view.clone()))
+        .push(deadlines(profile, view.clone()));
+
+    let right_side = Column::new()
+        .width(Length::FillPortion(3))
+        .spacing(10)
+        .width(Length::FillPortion(2))
+        .push(spendings(profile, view.clone()))
+        .push(pins(profile, view.clone()));
+
+    let container: Container<Message> = container(row!(left_side, right_side).spacing(20))
+        .height(Length::FillPortion(7))
+        .width(Length::Fill)
+        .padding(50)
+        .into();
+    container
+}
+
+fn recent_accounts(profile: &Profile, view: View) -> Container<Message> {
     let container: Container<Message> = container(column!(
         button(
             FontType::Title
@@ -87,4 +109,43 @@ pub fn recent_accounts(profile: &Profile, view: View) -> Container<Message> {
     .style(theme::Container::Custom(ContainerType::Box.get_box()))
     .padding(20);
     container
+}
+
+fn deadlines(_profile: &Profile, _view: View) -> Container<Message> {
+    container(column!(
+        text("Echéances en cours")
+            .width(Length::Fill)
+            .horizontal_alignment(alignment::Horizontal::Center),
+        row!(text(" ")),
+        row!(text("Prêt de la 4090 RTX"), text("834€")).spacing(20),
+    ))
+    .style(theme::Container::Custom(ContainerType::Box.get_box()))
+    .padding(20)
+}
+
+fn spendings(_profile: &Profile, _view: View) -> Container<Message> {
+    container(column!(
+        text("Dépenses du mois")
+            .width(Length::Fill)
+            .horizontal_alignment(alignment::Horizontal::Center),
+        row!(text(" ")),
+        text("[] Transports"),
+        text("[] Informatique"),
+        text("[] Sports"),
+        text("[] Alimentation"),
+    ))
+    .style(theme::Container::Custom(ContainerType::Box.get_box()))
+    .padding(20)
+}
+
+fn pins(_profile: &Profile, _view: View) -> Container<Message> {
+    container(column!(
+        text("Rappels")
+            .width(Length::Fill)
+            .horizontal_alignment(alignment::Horizontal::Center),
+        row!(text(" ")),
+        row!(text("Payer la facture d'eau du 11/04/23"))
+    ))
+    .style(theme::Container::Custom(ContainerType::Box.get_box()))
+    .padding(20)
 }

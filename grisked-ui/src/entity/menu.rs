@@ -1,6 +1,7 @@
-use iced::widget::Text;
+use grisked_profile::profile::Profile;
+use iced::widget::{Container, Text};
 
-use crate::{font::icon, Language};
+use crate::{entity, font::icon, view::View, Language, Message};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum MenuType {
@@ -13,6 +14,18 @@ pub enum MenuType {
 }
 
 impl MenuType {
+    pub fn get_container(
+        self,
+        profile: &Profile,
+        language: Language,
+        view: View,
+    ) -> Option<Container<Message>> {
+        match self {
+            MenuType::Dashboard => Some(entity::dashboard(profile, view)),
+            _ => None,
+        }
+    }
+
     pub fn get_icon(&self) -> Text<'static> {
         match self {
             Self::Dashboard => icon('🏠'),

@@ -13,7 +13,7 @@ use crate::{
 
 use super::menu::MenuType;
 
-pub fn sidebar_container(
+pub fn navbar_container(
     menu_type: &MenuType,
     language: Language,
     view: View,
