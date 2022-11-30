@@ -1,5 +1,6 @@
 use iced::{widget, Theme};
 
+pub mod label_square;
 pub mod spendings_chart;
 
 mod background;
