@@ -1,6 +1,6 @@
 use iced::{widget, Theme};
 
-pub mod draw_spendings;
+pub mod spendings_chart;
 
 mod background;
 mod box_button;

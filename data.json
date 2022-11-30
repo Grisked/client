@@ -1,1 +1,80 @@
-{"accounts":[{"name":"Compte Commun","default_balance":320.0,"bills":[{"name":"Clavier Gaming","price":-140.0,"due_date":120,"label_id":null},{"name":"Fiverr","price":220.0,"due_date":120,"label_id":null}]},{"name":"Livret A","default_balance":80.0,"bills":[{"name":"Grand mère","price":120.0,"due_date":120,"label_id":null}]}],"labels":[]}
+{
+  "accounts": [
+    {
+      "name": "Compte Commun",
+      "default_balance": 320,
+      "bills": [
+        {
+          "name": "Clavier Gaming",
+          "price": -140,
+          "due_date": 120,
+          "label_id": null
+        },
+        {
+        "name": "Pâtes",
+            "price": -1,
+            "due_date": 120,
+            "label_id": 1
+        },
+        {
+            "name": "Courses",
+            "price": -70,
+            "due_date": 120,
+            "label_id": 1
+        },
+        {
+          "name": "Fiverr",
+          "price": -220,
+          "due_date": 120,
+          "label_id": 3
+        },
+        {
+            "name": "VPS Août",
+            "price": -20,
+            "due_date": 120,
+            "label_id": 2
+        }
+      ]
+    },
+    {
+      "name": "Livret A",
+      "default_balance": 80,
+      "bills": [
+        {
+          "name": "Grand mère",
+          "price": 120,
+          "due_date": 120,
+          "label_id": null
+        },
+        {
+            "name": "Vacances sénégale",
+            "price": -125,
+            "due_date": 120,
+            "label_id": 4
+        }
+      ]
+    }
+  ],
+  "labels": [
+    {
+        "id": 1,
+        "name": "Nourriture",
+        "color": [1.0, 0.0, 0.0]
+    },
+    {
+        "id": 2,
+        "name": "VPS",
+        "color": [0.4, 0.0, 0.7]
+    },
+    {
+        "id": 3,
+        "name": "Factures",
+        "color": [0.0, 0.0, 1.0]
+    },
+    {
+        "id": 4,
+        "name": "Vacances",
+        "color": [0.0, 1.0, 0.0]
+    }
+  ]
+}

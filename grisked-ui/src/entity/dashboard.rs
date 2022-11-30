@@ -12,7 +12,7 @@ use grisked_profile::{
 use crate::{
     entity::menu::MenuType,
     font::{FontFamily, FontType},
-    stylesheet::{draw_spendings, ButtonType, ContainerType},
+    stylesheet::{spendings_chart, ButtonType, ContainerType},
     view::{View, ViewSize},
     Message,
 };
@@ -131,18 +131,35 @@ fn deadlines(_profile: &Profile, _view: &View) -> Container<'static, Message> {
     .padding(20)
 }
 
-fn spendings(_profile: &Profile, _view: &View) -> Container<'static, Message> {
-    let _ = draw_spendings::draw();
+fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
+    /*let rankings = profile.data.get_labels_ranking();
+    let mut total = 0.0;
+    for ranking in &rankings {
+        total += ranking.1;
+    }
+    let mut percentages: Vec<(Option<Label>, f64)> = Vec::new();
+    for ranking in rankings {
+        percentages.push((ranking.0, ranking.1 / total));
+    } Convert to percentage, but it works fine without it, weirdly.. */
+    let rankings = profile.data.get_labels_rankings();
+    let _ = spendings_chart::draw(&rankings);
 
     container(column!(
         text("Dépenses du mois")
             .width(Length::Fill)
             .horizontal_alignment(alignment::Horizontal::Center),
         container(svg(svg::Handle::from_path("assets/pie-chart.svg"))),
-        text("[] Transports"),
-        text("[] Informatique"),
-        text("[] Sports"),
-        text("[] Alimentation"),
+        {
+            let mut column = Column::new();
+            for ranking in rankings {
+                match ranking.0 {
+                    Some(ranking) => column = column.push(text(format!("[] {}", &ranking.name))),
+                    None => column = column.push(text(format!("[] Autre"))),
+                };
+            }
+
+            column
+        }
     ))
     .style(theme::Container::Custom(ContainerType::Box.get_box()))
     .padding(20)
