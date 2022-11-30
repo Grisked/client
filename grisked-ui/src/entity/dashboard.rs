@@ -1,7 +1,7 @@
 use iced::{
     alignment, theme,
     widget::{button, column, container, row, svg, text, Canvas, Column, Container},
-    Color, Length,
+    Color, Length, alignment::Alignment
 };
 
 use grisked_profile::{
@@ -132,10 +132,14 @@ fn deadlines(_profile: &Profile, _view: &View) -> Container<'static, Message> {
 }
 
 fn beautify_legend(name: String, color: [f32; 3]) -> Column<'static, Message> {
-    column!(row!(
-        Canvas::new(LabelSquare::new(color)),
-        text(format!("{}", name))
-    ))
+    column!(
+        row!(
+        text(format!(" ")).width(Length::Units(20)),
+        Canvas::new(LabelSquare::new(color)).width(Length::Units(25)).height(Length::Units(25)),
+        text(format!("{}", name)),
+        text(format!(" ")).width(Length::Units(20)),
+        ).spacing(10).padding(5)
+    ).align_items(Alignment::Center)
 }
 
 fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
@@ -152,35 +156,42 @@ fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
     let _ = spendings_chart::draw(&rankings);
 
     container(column!(
-        text("Dépenses du mois")
-            .width(Length::Fill)
-            .horizontal_alignment(alignment::Horizontal::Center),
+        button(
+            FontType::Title
+                .get_text("Dépenses par catégories".to_string(), FontFamily::IndieFlower)
+                .width(Length::Fill)
+                .style(Color::from([0.2235, 0.0, 0.5294]))
+                .size(30)
+                .horizontal_alignment(alignment::Horizontal::Left)
+        )
+        .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box())),
         row!(
             container(svg(svg::Handle::from_path("assets/pie-chart.svg")))
                 .width(Length::FillPortion(3)),
-            container(
+            container (
                 {
                     let mut column = Column::new();
+                    column = column.push(column!(text(" ")));
                     for ranking in rankings {
                         match ranking.0 {
                             Some(ranking) => {
                                 column = column
-                                    .push(beautify_legend(ranking.name.clone(), ranking.color))
+                                .push(beautify_legend(ranking.name.clone(), ranking.color))
                             }
                             None => {
                                 column = column
-                                    .push(beautify_legend("Autre".to_string(), [0.5, 0.5, 0.5]))
+                                .push(beautify_legend("Autre".to_string(), [0.5, 0.5, 0.5]))
                             }
                         };
                     }
-
+                    column = column.push(column!(text(" ")));
                     column
                 }
                 .width(Length::Shrink)
             )
             .style(theme::Container::Custom(ContainerType::Box.get_box()))
-            .width(Length::FillPortion(3))
         )
+        .align_items(iced::Alignment::Center)
     ))
     .style(theme::Container::Custom(ContainerType::Box.get_box()))
     .padding(20)
