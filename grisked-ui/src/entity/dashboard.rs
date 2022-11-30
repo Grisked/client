@@ -156,15 +156,12 @@ fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
     let _ = spendings_chart::draw(&rankings);
 
     container(column!(
-        button(
-            FontType::Title
-                .get_text("Dépenses par catégories".to_string(), FontFamily::IndieFlower)
-                .width(Length::Fill)
-                .style(Color::from([0.2235, 0.0, 0.5294]))
-                .size(30)
-                .horizontal_alignment(alignment::Horizontal::Left)
-        )
-        .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box())),
+        FontType::Title
+            .get_text("Dépenses par catégories".to_string(), FontFamily::IndieFlower)
+            .width(Length::Fill)
+            .style(Color::from([0.2235, 0.0, 0.5294]))
+            .size(30)
+            .horizontal_alignment(alignment::Horizontal::Left),
         row!(
             container(svg(svg::Handle::from_path("assets/pie-chart.svg")))
                 .width(Length::FillPortion(3)),
