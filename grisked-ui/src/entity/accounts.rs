@@ -3,7 +3,7 @@ use iced::{
     alignment,
     alignment::Alignment,
     theme,
-    widget::{button, column, container, row, text, text_input, Canvas, Column, Container},
+    widget::{button, column, container, row, svg, text, Canvas, Column, Container},
     Color, Length,
 };
 
@@ -20,8 +20,7 @@ pub fn accounts(profile: &Profile, view: &View) -> Container<'static, Message> {
     let container: Container<Message> = container(row!(center).spacing(20))
         .height(Length::FillPortion(7))
         .width(Length::Fill)
-        .padding(50)
-        .into();
+        .padding(50);
     container
 }
 
@@ -37,11 +36,14 @@ fn list_accounts(_profile: &Profile, _view: &View) -> Container<'static, Message
         // Selecteur de comptes
         row!(
             button(
-                text("<")
+                FontType::Title
+                    .get_text("<".to_string(), FontFamily::Kanit)
+                    .style(Color::BLACK)
                     .horizontal_alignment(alignment::Horizontal::Center)
                     .width(Length::Fill)
-                    .size(30)
+                    .size(100)
             )
+            .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
             .width(Length::FillPortion(1)),
             button(container(column!(
                 text("Compte 1")
@@ -86,11 +88,14 @@ fn list_accounts(_profile: &Profile, _view: &View) -> Container<'static, Message
             ))
             .width(Length::FillPortion(1)),
             button(
-                text(">")
+                FontType::Title
+                    .get_text(">".to_string(), FontFamily::Kanit)
+                    .style(Color::BLACK)
                     .horizontal_alignment(alignment::Horizontal::Center)
                     .width(Length::Fill)
-                    .size(30)
+                    .size(100)
             )
+            .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
             .width(Length::FillPortion(1)),
         )
         .spacing(10)
@@ -147,7 +152,9 @@ fn list_accounts(_profile: &Profile, _view: &View) -> Container<'static, Message
                 ))
                 .width(Length::Fill)
                 .padding(10),
-                button("+"),
+                button(svg(svg::Handle::from_path("assets/add_button.svg")))
+                    .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
+                    .width(Length::Units(48)),
             )
             .align_items(Alignment::Center),))
             .style(theme::Container::Custom(ContainerType::Box.get_box()))
@@ -173,7 +180,9 @@ fn list_accounts(_profile: &Profile, _view: &View) -> Container<'static, Message
                 ))
                 .width(Length::Fill)
                 .padding(10),
-                button("+"),
+                button(svg(svg::Handle::from_path("assets/add_button.svg")))
+                    .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
+                    .width(Length::Units(48)),
             )
             .align_items(Alignment::Center),))
             .style(theme::Container::Custom(ContainerType::Box.get_box()))
@@ -238,7 +247,9 @@ fn list_accounts(_profile: &Profile, _view: &View) -> Container<'static, Message
                 ))
                 .width(Length::Fill)
                 .padding(10),
-                button("+"),
+                button(svg(svg::Handle::from_path("assets/add_button.svg")))
+                    .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
+                    .width(Length::Units(48)),
             )
             .align_items(Alignment::Center),))
             .style(theme::Container::Custom(ContainerType::Box.get_box()))
@@ -271,7 +282,9 @@ fn list_accounts(_profile: &Profile, _view: &View) -> Container<'static, Message
                 ))
                 .width(Length::Fill)
                 .padding(10),
-                button("+"),
+                button(svg(svg::Handle::from_path("assets/add_button.svg")))
+                    .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
+                    .width(Length::Units(48)),
             )
             .align_items(Alignment::Center),))
             .style(theme::Container::Custom(ContainerType::Box.get_box()))
@@ -280,5 +293,4 @@ fn list_accounts(_profile: &Profile, _view: &View) -> Container<'static, Message
         )
         .spacing(50),
     ))
-    .padding(20)
 }

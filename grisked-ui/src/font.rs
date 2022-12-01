@@ -100,11 +100,9 @@ impl FontSize {
                     bytes: include_bytes!("../../fonts/Kanit/900.ttf"),
                 },
             },
-            FontFamily::IndieFlower => match self {
-                _ => Font::External {
-                    name: "IndieFlower-Regular",
-                    bytes: include_bytes!("../../fonts/IndieFlower/400.ttf"),
-                },
+            FontFamily::IndieFlower => Font::External {
+                name: "IndieFlower-Regular",
+                bytes: include_bytes!("../../fonts/IndieFlower/400.ttf"),
             },
         }
     }

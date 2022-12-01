@@ -10,11 +10,8 @@ pub fn load_json<T: DeserializeOwned>(file_path: String) -> Result<T, String> {
     let file = file.unwrap();
     let settings = serde_json::from_reader(&file);
     if settings.is_err() {
-        match std::fs::read_to_string(&file_path) {
-            Ok(content) => {
-                let _ = std::fs::write(format!("{}.old", &file_path), content);
-            }
-            Err(_) => {}
+        if let Ok(content) = std::fs::read_to_string(&file_path) {
+            let _ = std::fs::write(format!("{}.old", &file_path), content);
         }
         return Err(format!("{:?}", settings.err().unwrap()));
     }

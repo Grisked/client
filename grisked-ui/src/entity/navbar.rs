@@ -1,11 +1,11 @@
 use iced::{
     theme,
-    widget::{button, container, row, Container, Row},
+    widget::{button, container, row, svg, Container, Row},
     Length,
 };
 
 use crate::{
-    font::{icon, FontFamily, FontType},
+    font::{FontFamily, FontType},
     stylesheet::{ButtonType, ContainerType},
     view::{View, ViewSize},
     Language, Message,
@@ -18,7 +18,7 @@ pub fn navbar_container(
     language: Language,
     view: View,
 ) -> Container<Message> {
-    let mut sidebar = [
+    let navbar = [
         MenuType::Dashboard,
         MenuType::Accounts,
         MenuType::Charts,
@@ -30,7 +30,12 @@ pub fn navbar_container(
         Row::new()
             .spacing(10)
             .height(Length::FillPortion(1))
-            .width(Length::Fill),
+            .width(Length::Fill)
+            .push(
+                svg(svg::Handle::from_path("assets/piggy-bank-fill.svg"))
+                    .width(Length::Units(ViewSize::Header.get_size(&view)))
+                    .height(Length::Units(ViewSize::Header.get_size(&view))),
+            ),
         |row, option| {
             let mut button = button(
                 row![FontType::Header
@@ -51,14 +56,17 @@ pub fn navbar_container(
         },
     );
 
-    sidebar = sidebar.push(icon('💰'));
+    let question = svg(svg::Handle::from_path("assets/question-circle-fill.svg"))
+        .width(Length::Units(ViewSize::Header.get_size(&view)))
+        .height(Length::Units(ViewSize::Header.get_size(&view)));
 
-    let sidebar_container: Container<Message> =
-        container(sidebar.align_items(iced::Alignment::Center))
-            .width(Length::Fill)
-            .height(Length::FillPortion(1))
-            .padding(20)
-            .style(theme::Container::Custom(ContainerType::Sidebar.get_box()));
-
-    sidebar_container
+    container(row!(row!(
+        navbar.align_items(iced::Alignment::Center),
+        container(question)
+    )
+    .align_items(iced::Alignment::Center)))
+    .width(Length::Fill)
+    .height(Length::FillPortion(1))
+    .padding([20, 80, 20, 80])
+    .style(theme::Container::Custom(ContainerType::Navbar.get_box()))
 }

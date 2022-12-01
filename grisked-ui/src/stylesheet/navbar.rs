@@ -3,9 +3,9 @@ use iced::{
     Background, Color, Theme,
 };
 
-pub struct Sidebar;
+pub struct Navbar;
 
-impl StyleSheet for Sidebar {
+impl StyleSheet for Navbar {
     type Style = Theme;
 
     fn appearance(&self, _style: &Self::Style) -> Appearance {

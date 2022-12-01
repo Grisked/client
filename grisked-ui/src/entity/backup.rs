@@ -13,8 +13,7 @@ pub fn backup(profile: &Profile, view: &View) -> Container<'static, Message> {
     let container: Container<Message> = container(row!(center).spacing(20))
         .height(Length::FillPortion(7))
         .width(Length::Fill)
-        .padding(50)
-        .into();
+        .padding(50);
     container
 }
 

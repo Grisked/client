@@ -82,7 +82,7 @@ impl Data {
 
         let mut vec: Vec<(Option<Label>, f64)> = Vec::from_iter(ranking)
             .iter()
-            .map(|(label, price)| (self.get_label_by_id(label.clone()), price.clone()))
+            .map(|(label, price)| (self.get_label_by_id(*label), *price))
             .collect();
         vec.sort_by(|&(_, a), &(_, b)| {
             if a > b {

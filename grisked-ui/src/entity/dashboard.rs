@@ -1,7 +1,9 @@
 use iced::{
-    alignment, theme,
+    alignment,
+    alignment::Alignment,
+    theme,
     widget::{button, column, container, row, svg, text, Canvas, Column, Container},
-    Color, Length, alignment::Alignment
+    Color, Length,
 };
 
 use grisked_profile::{
@@ -34,8 +36,7 @@ pub fn dashboard(profile: &Profile, view: &View) -> Container<'static, Message> 
     let container: Container<Message> = container(row!(left_side, right_side).spacing(20))
         .height(Length::FillPortion(7))
         .width(Length::Fill)
-        .padding(50)
-        .into();
+        .padding(50);
     container
 }
 
@@ -45,16 +46,16 @@ fn get_bills(bills: &Vec<Bill>, view: &View) -> Column<'static, Message> {
         c_bills = c_bills.push(
             row!(
                 text("• ")
-                    .size(ViewSize::Text.get_size(&view))
+                    .size(ViewSize::Text.get_size(view))
                     .vertical_alignment(alignment::Vertical::Center)
                     .height(Length::Units(20)),
                 FontType::Text
                     .get_text(bill.name.clone(), FontFamily::Kanit)
-                    .size(ViewSize::Text.get_size(&view)),
+                    .size(ViewSize::Text.get_size(view)),
                 {
                     let mut text = FontType::Text
                         .get_text(bill.pretty_price(), FontFamily::Kanit)
-                        .size(ViewSize::Text.get_size(&view));
+                        .size(ViewSize::Text.get_size(view));
                     if bill.price < 0.0 {
                         text = text.style(Color::from([(189.0 / 255.0), 0.0, 0.0]))
                     } else {
@@ -101,7 +102,7 @@ fn recent_accounts(profile: &Profile, view: &View) -> Container<'static, Message
                 .get_text("Comptes récents".to_string(), FontFamily::IndieFlower)
                 .width(Length::Fill)
                 .style(Color::from([0.2235, 0.0, 0.5294]))
-                .size(ViewSize::Title.get_size(&view))
+                .size(ViewSize::Title.get_size(view))
                 .horizontal_alignment(alignment::Horizontal::Left)
         )
         .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
@@ -132,14 +133,17 @@ fn deadlines(_profile: &Profile, _view: &View) -> Container<'static, Message> {
 }
 
 fn beautify_legend(name: String, color: [f32; 3]) -> Column<'static, Message> {
-    column!(
-        row!(
-        text(format!(" ")).width(Length::Units(20)),
-        Canvas::new(LabelSquare::new(color)).width(Length::Units(25)).height(Length::Units(25)),
-        text(format!("{}", name)),
-        text(format!(" ")).width(Length::Units(20)),
-        ).spacing(10).padding(5)
-    ).align_items(Alignment::Center)
+    column!(row!(
+        text(" ").width(Length::Units(20)),
+        Canvas::new(LabelSquare::new(color))
+            .width(Length::Units(25))
+            .height(Length::Units(25)),
+        text(name),
+        text(" ").width(Length::Units(20)),
+    )
+    .spacing(10)
+    .padding(5))
+    .align_items(Alignment::Center)
 }
 
 fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
@@ -157,7 +161,10 @@ fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
 
     container(column!(
         FontType::Title
-            .get_text("Dépenses par catégories".to_string(), FontFamily::IndieFlower)
+            .get_text(
+                "Dépenses par catégories".to_string(),
+                FontFamily::IndieFlower
+            )
             .width(Length::Fill)
             .style(Color::from([0.2235, 0.0, 0.5294]))
             .size(30)
@@ -165,7 +172,7 @@ fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
         row!(
             container(svg(svg::Handle::from_path("assets/pie-chart.svg")))
                 .width(Length::FillPortion(3)),
-            container (
+            container(
                 {
                     let mut column = Column::new();
                     column = column.push(column!(text(" ")));
@@ -173,11 +180,11 @@ fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
                         match ranking.0 {
                             Some(ranking) => {
                                 column = column
-                                .push(beautify_legend(ranking.name.clone(), ranking.color))
+                                    .push(beautify_legend(ranking.name.clone(), ranking.color))
                             }
                             None => {
                                 column = column
-                                .push(beautify_legend("Autre".to_string(), [0.5, 0.5, 0.5]))
+                                    .push(beautify_legend("Autre".to_string(), [0.5, 0.5, 0.5]))
                             }
                         };
                     }

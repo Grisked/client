@@ -63,10 +63,9 @@ impl Application for Grisked {
         let navbar_container =
             navbar_container(&self.menu_type, self.language.clone(), self.view.clone());
 
-        let context =
-            self.menu_type
-                .clone()
-                .get_container(&self.profile, &self.language, &self.view);
+        let context = self
+            .menu_type
+            .get_container(&self.profile, &self.language, &self.view);
         match context {
             Some(context) => {
                 let content = column![navbar_container, context];

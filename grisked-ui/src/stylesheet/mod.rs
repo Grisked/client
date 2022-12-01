@@ -7,8 +7,8 @@ mod account_button;
 mod background;
 mod box_button;
 mod custom_box;
+mod navbar;
 mod regular_button;
-mod sidebar;
 
 pub enum ButtonType {
     RegularSelected,
@@ -29,7 +29,7 @@ impl ButtonType {
 }
 
 pub enum ContainerType {
-    Sidebar,
+    Navbar,
     Background,
     Box,
 }
@@ -37,7 +37,7 @@ pub enum ContainerType {
 impl ContainerType {
     pub fn get_box(&self) -> Box<dyn widget::container::StyleSheet<Style = Theme> + 'static> {
         match self {
-            Self::Sidebar => Box::new(sidebar::Sidebar),
+            Self::Navbar => Box::new(navbar::Navbar),
             Self::Background => Box::new(background::AppBackground),
             Self::Box => Box::new(custom_box::CustomBox),
         }
