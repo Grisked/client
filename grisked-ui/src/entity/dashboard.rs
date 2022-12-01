@@ -147,15 +147,6 @@ fn beautify_legend(name: String, color: [f32; 3]) -> Column<'static, Message> {
 }
 
 fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
-    /*let rankings = profile.data.get_labels_ranking();
-    let mut total = 0.0;
-    for ranking in &rankings {
-        total += ranking.1;
-    }
-    let mut percentages: Vec<(Option<Label>, f64)> = Vec::new();
-    for ranking in rankings {
-        percentages.push((ranking.0, ranking.1 / total));
-    } Convert to percentage, but it works fine without it, weirdly.. */
     let rankings = profile.data.get_labels_rankings();
     let _ = spendings_chart::draw(&rankings);
 
