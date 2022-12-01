@@ -7,6 +7,7 @@ pub struct Account {
     pub name: String,
     default_balance: f64,
     pub bills: Vec<Bill>,
+    pub color: [f32; 3],
 }
 
 impl Default for Account {
@@ -15,16 +16,18 @@ impl Default for Account {
             name: "new_account".to_string(),
             default_balance: 0.0,
             bills: Vec::new(),
+            color: [0.2, 0.2, 0.2],
         }
     }
 }
 
 impl Account {
-    pub fn new(name: &str, default_balance: f64, bills: Vec<Bill>) -> Self {
+    pub fn new(name: &str, default_balance: f64, bills: Vec<Bill>, color: [f32; 3]) -> Self {
         Self {
             name: name.to_string(),
             default_balance,
             bills,
+            color,
         }
     }
 

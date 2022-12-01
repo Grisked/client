@@ -1,9 +1,9 @@
-use grisked_profile::profile::Profile;
+use grisked_profile::{models::account::Account, profile::Profile};
 use iced::{
     alignment,
     alignment::Alignment,
     theme,
-    widget::{button, column, container, row, svg, text, Canvas, Column, Container},
+    widget::{button, column, container, row, svg, text, Button, Canvas, Column, Container, Row},
     Color, Length,
 };
 
@@ -27,7 +27,42 @@ pub fn accounts(profile: &Profile, view: &View) -> Container<'static, Message> {
     container
 }
 
-fn list_accounts(_profile: &Profile, _view: &View) -> Container<'static, Message> {
+fn account_scroll(text: &str, _view: &View) -> Button<'static, Message> {
+    button(
+        FontType::Title
+            .get_text(text.to_string(), FontFamily::Kanit)
+            .style(Color::BLACK)
+            .horizontal_alignment(alignment::Horizontal::Center)
+            .width(Length::Fill)
+            .size(100),
+    )
+    .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
+    .width(Length::FillPortion(1))
+}
+
+fn get_account(account: &Account, _view: &View, is_selected: bool) -> Button<'static, Message> {
+    let size = match is_selected {
+        true => 40,
+        false => 20,
+    };
+    button(container(column!(
+        FontType::Title
+            .get_text(account.name.clone(), FontFamily::Kanit)
+            .horizontal_alignment(alignment::Horizontal::Center)
+            .width(Length::Fill)
+            .size(size),
+        text(format!("{:0.2} €", account.get_account_balance()))
+            .horizontal_alignment(alignment::Horizontal::Center)
+            .width(Length::Fill)
+            .size(size),
+    )))
+    .style(theme::Button::Custom(
+        ButtonType::AccountIgnored(account.color).get_box(),
+    ))
+    .width(Length::FillPortion(1))
+}
+
+fn list_accounts(profile: &Profile, view: &View) -> Container<'static, Message> {
     // Header
     container(column!(
         FontType::Title
@@ -37,70 +72,19 @@ fn list_accounts(_profile: &Profile, _view: &View) -> Container<'static, Message
             .size(45)
             .horizontal_alignment(alignment::Horizontal::Center),
         // Selecteur de comptes
-        row!(
-            button(
-                FontType::Title
-                    .get_text("<".to_string(), FontFamily::Kanit)
-                    .style(Color::BLACK)
-                    .horizontal_alignment(alignment::Horizontal::Center)
-                    .width(Length::Fill)
-                    .size(100)
-            )
-            .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
-            .width(Length::FillPortion(1)),
-            button(container(column!(
-                text("Compte 1")
-                    .horizontal_alignment(alignment::Horizontal::Center)
-                    .width(Length::Fill)
-                    .size(20),
-                text("600.00 €")
-                    .horizontal_alignment(alignment::Horizontal::Center)
-                    .width(Length::Fill)
-                    .size(20),
-            )))
-            .style(theme::Button::Custom(
-                ButtonType::AccountIgnored([0.0, 0.0, 1.0]).get_box()
-            ))
-            .width(Length::FillPortion(1)),
-            button(container(column!(
-                text("Compte 1")
-                    .horizontal_alignment(alignment::Horizontal::Center)
-                    .width(Length::Fill)
-                    .size(30),
-                text("600.00 €")
-                    .horizontal_alignment(alignment::Horizontal::Center)
-                    .width(Length::Fill)
-                    .size(30),
-            )))
-            .style(theme::Button::Custom(
-                ButtonType::AccountIgnored([0.0, 0.0, 1.0]).get_box()
-            ))
-            .width(Length::FillPortion(1)),
-            button(container(column!(
-                text("Compte 1")
-                    .horizontal_alignment(alignment::Horizontal::Center)
-                    .width(Length::Fill)
-                    .size(20),
-                text("600.00 €")
-                    .horizontal_alignment(alignment::Horizontal::Center)
-                    .width(Length::Fill)
-                    .size(20),
-            )))
-            .style(theme::Button::Custom(
-                ButtonType::AccountIgnored([0.0, 0.0, 1.0]).get_box()
-            ))
-            .width(Length::FillPortion(1)),
-            button(
-                FontType::Title
-                    .get_text(">".to_string(), FontFamily::Kanit)
-                    .style(Color::BLACK)
-                    .horizontal_alignment(alignment::Horizontal::Center)
-                    .width(Length::Fill)
-                    .size(100)
-            )
-            .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
-            .width(Length::FillPortion(1)),
-        )
+        {
+            let mut row = Row::new();
+
+            row = row.push(account_scroll("<", view));
+            for (i, account) in profile.data.accounts.iter().enumerate() {
+                if i > 2 {
+                    break;
+                }
+                row = row.push(get_account(account, view, i == 1));
+            }
+            row = row.push(account_scroll(">", view));
+            row
+        }
         .spacing(10)
         .align_items(Alignment::Center),
         // Weird wish spacing

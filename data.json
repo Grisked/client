@@ -34,7 +34,8 @@
             "due_date": 120,
             "label_id": 2
         }
-      ]
+      ],
+        "color": [0.8, 0.0, 0.0]
     },
     {
       "name": "Livret A",
@@ -52,7 +53,21 @@
             "due_date": 120,
             "label_id": 4
         }
-      ]
+      ],
+        "color": [0.0, 1.0, 0.0]
+    },
+    {
+      "name": "Economies",
+      "default_balance": 2938,
+      "bills": [
+        {
+          "name": "Virement livret A",
+          "price": 392.82,
+          "due_date": 120,
+          "label_id": null
+        }
+      ],
+        "color": [0.0, 0.9, 0.6]
     }
   ],
   "labels": [
