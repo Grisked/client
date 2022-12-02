@@ -43,7 +43,7 @@ pub fn navbar_container(
                     .size(ViewSize::Header.get_size(&view))]
                 .spacing(10),
             )
-            .on_press(crate::Message::MenuChanged(*option))
+            .on_press(crate::Message::MenuChanged(option.to_owned()))
             .padding(10);
 
             if menu_type == option {

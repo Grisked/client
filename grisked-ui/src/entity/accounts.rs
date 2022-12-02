@@ -8,6 +8,7 @@ use iced::{
 };
 
 use crate::{
+    entity::menu::MenuType,
     font::{FontFamily, FontType},
     stylesheet::{label_square::LabelSquare, ButtonType, ContainerType},
     view::View,
@@ -40,7 +41,7 @@ fn account_scroll(text: &str, _view: &View) -> Button<'static, Message> {
     .width(Length::FillPortion(1))
 }
 
-fn get_account(account: &Account, _view: &View, is_selected: bool) -> Button<'static, Message> {
+fn get_account(account: Account, _view: &View, is_selected: bool) -> Button<'static, Message> {
     let size = match is_selected {
         true => 40,
         false => 20,
@@ -59,6 +60,7 @@ fn get_account(account: &Account, _view: &View, is_selected: bool) -> Button<'st
     .style(theme::Button::Custom(
         ButtonType::AccountIgnored(account.color).get_box(),
     ))
+    .on_press(Message::MenuChanged(MenuType::AccountData(account)))
     .width(Length::FillPortion(1))
 }
 
@@ -76,11 +78,11 @@ fn list_accounts(profile: &Profile, view: &View) -> Container<'static, Message> 
             let mut row = Row::new();
 
             row = row.push(account_scroll("<", view));
-            for (i, account) in profile.data.accounts.iter().enumerate() {
+            for (i, account) in profile.data.get_accounts().iter().enumerate() {
                 if i > 2 {
                     break;
                 }
-                row = row.push(get_account(account, view, i == 1));
+                row = row.push(get_account(account.clone(), view, i == 1));
             }
             row = row.push(account_scroll(">", view));
             row

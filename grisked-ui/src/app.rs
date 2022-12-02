@@ -51,9 +51,22 @@ impl Application for Grisked {
             Message::KeyPressed(keycode, modifiers) => {
                 handler::zoom::handle(keycode, modifiers, &mut self.view)
             }
-            Message::SaveRequested(_) => {
+            Message::SaveRequested => {
                 println!("Saving json files !");
                 self.profile.save();
+            }
+            Message::AddAccount(account) => {
+                self.profile.data.register_account(account);
+            }
+            Message::AddInvoice(account_id, bill) => {
+                self.profile
+                    .data
+                    .get_account(account_id)
+                    .unwrap()
+                    .add_bill(bill);
+            }
+            Message::AddLabel(label) => {
+                self.profile.data.add_label(label);
             }
         }
         Command::none()

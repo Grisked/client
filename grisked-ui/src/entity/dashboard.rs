@@ -91,7 +91,7 @@ fn get_account(account: &Account, view: &View) -> Column<'static, Message> {
                 .horizontal_alignment(alignment::Horizontal::Right)
                 .width(Length::Fill)
         ),
-        get_bills(&account.bills, view)
+        get_bills(account.get_bills(), view)
     )
 }
 
@@ -109,7 +109,7 @@ fn recent_accounts(profile: &Profile, view: &View) -> Container<'static, Message
         .on_press(Message::MenuChanged(MenuType::Accounts)),
         {
             let mut column = Column::new().spacing(25);
-            for account in &profile.data.accounts {
+            for account in profile.data.get_accounts() {
                 column = column.push(get_account(account, view))
             }
             column
