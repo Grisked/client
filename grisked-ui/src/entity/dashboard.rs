@@ -238,13 +238,42 @@ fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
     .padding(20)
 }
 
-fn pins(_profile: &Profile, _view: &View) -> Container<'static, Message> {
+fn pins(_profile: &Profile, view: &View) -> Container<'static, Message> {
     container(column!(
-        text("Rappels")
+        FontType::Title
+            .get_text("Rappels".to_string(), FontFamily::IndieFlower)
             .width(Length::Fill)
-            .horizontal_alignment(alignment::Horizontal::Center),
-        row!(text(" ")),
-        row!(text("Payer la facture d'eau du 11/04/23"))
+            .style(Color::from([0.2235, 0.0, 0.5294]))
+            .size(30)
+            .horizontal_alignment(alignment::Horizontal::Left),
+        {
+            let mut column = Column::new().spacing(10);
+            column = column.push(row!(
+                svg(svg::Handle::from_path("assets/pin-fill.svg"))
+                    .width(Length::Units(ViewSize::Header.get_size(&view) - 5))
+                    .height(Length::Units(ViewSize::Header.get_size(&view) - 5)),
+                FontType::Text
+                    .get_text("RTX 2060".to_string(), FontFamily::Kanit)
+                    .size(ViewSize::Text.get_size(view)),
+            ));
+            column = column.push(row!(
+                svg(svg::Handle::from_path("assets/pin-fill.svg"))
+                    .width(Length::Units(ViewSize::Header.get_size(&view) - 5))
+                    .height(Length::Units(ViewSize::Header.get_size(&view) - 5)),
+                FontType::Text
+                    .get_text("RTX 2060".to_string(), FontFamily::Kanit)
+                    .size(ViewSize::Text.get_size(view)),
+            ));
+            column = column.push(row!(
+                svg(svg::Handle::from_path("assets/pin-fill.svg"))
+                    .width(Length::Units(ViewSize::Header.get_size(&view) - 5))
+                    .height(Length::Units(ViewSize::Header.get_size(&view) - 5)),
+                FontType::Text
+                    .get_text("RTX 2060".to_string(), FontFamily::Kanit)
+                    .size(ViewSize::Text.get_size(view)),
+            ));
+            column
+        },
     ))
     .style(theme::Container::Custom(ContainerType::Box.get_box()))
     .padding(20)
