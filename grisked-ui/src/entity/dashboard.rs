@@ -136,7 +136,7 @@ fn deadlines(_profile: &Profile, view: &View) -> Container<'static, Message> {
                 FontType::Text
                     .get_text("RTX 2060".to_string(), FontFamily::Kanit)
                     .size(ViewSize::Text.get_size(view)),
-                FontType::Text
+                FontType::TextBold
                     .get_text("400.00 €".to_string(), FontFamily::Kanit)
                     .horizontal_alignment(alignment::Horizontal::Right)
                     .size(ViewSize::Text.get_size(view))
@@ -150,7 +150,7 @@ fn deadlines(_profile: &Profile, view: &View) -> Container<'static, Message> {
                 FontType::Text
                     .get_text("RTX 2060".to_string(), FontFamily::Kanit)
                     .size(ViewSize::Text.get_size(view)),
-                FontType::Text
+                FontType::TextBold
                     .get_text("400.00 €".to_string(), FontFamily::Kanit)
                     .horizontal_alignment(alignment::Horizontal::Right)
                     .size(ViewSize::Text.get_size(view))
@@ -164,7 +164,7 @@ fn deadlines(_profile: &Profile, view: &View) -> Container<'static, Message> {
                 FontType::Text
                     .get_text("RTX 2060".to_string(), FontFamily::Kanit)
                     .size(ViewSize::Text.get_size(view)),
-                FontType::Text
+                FontType::TextBold
                     .get_text("400.00 €".to_string(), FontFamily::Kanit)
                     .horizontal_alignment(alignment::Horizontal::Right)
                     .size(ViewSize::Text.get_size(view))
