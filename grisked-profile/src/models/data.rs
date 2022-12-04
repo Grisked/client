@@ -69,7 +69,7 @@ impl Data {
         }
     }
 
-    pub fn get_labels_rankings(&self) -> Vec<(Option<Label>, f64)> {
+    pub fn get_labels_rankings(&self, limit: Option<u32>) -> Vec<(Option<Label>, f64)> {
         let mut ranking: HashMap<Option<u16>, f64> = HashMap::new();
 
         for account in &self.accounts {
@@ -95,7 +95,26 @@ impl Data {
                 Ordering::Less
             }
         });
-        vec
+
+        match limit {
+            Some(limit) => {
+                let mut elements: Vec<(Option<Label>, f64)> = Vec::new();
+                let mut total: f64 = 0.0;
+                let mut i: u32 = 0;
+
+                for element in vec {
+                    if i < limit && element.0.is_some() {
+                        i += 1;
+                        elements.push(element);
+                    } else {
+                        total += element.1
+                    }
+                }
+                elements.push((None, total));
+                return elements;
+            }
+            None => vec,
+        }
     }
 
     fn register_accounts(&mut self) {

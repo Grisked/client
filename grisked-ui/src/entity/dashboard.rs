@@ -42,7 +42,10 @@ pub fn dashboard(profile: &Profile, view: &View) -> Container<'static, Message> 
 
 fn get_bills(bills: &Vec<Bill>, view: &View) -> Column<'static, Message> {
     let mut c_bills = Column::new();
-    for bill in bills {
+    for (i, bill) in bills.iter().enumerate() {
+        if i >= 3 {
+            break;
+        }
         c_bills = c_bills.push(
             row!(
                 text("• ").size(ViewSize::Text.get_size(view)),
@@ -103,8 +106,11 @@ fn recent_accounts(profile: &Profile, view: &View) -> Container<'static, Message
         .on_press(Message::MenuChanged(MenuType::Accounts)),
         {
             let mut column = Column::new().spacing(25);
-            for account in profile.data.get_accounts() {
-                column = column.push(get_account(account, view))
+            for (i, element) in profile.data.get_accounts().iter().enumerate() {
+                if i >= 2 {
+                    break;
+                }
+                column = column.push(get_account(element, view))
             }
             column
         },
@@ -192,8 +198,8 @@ fn beautify_legend(name: String, color: [f32; 3]) -> Column<'static, Message> {
     .align_items(Alignment::Center)
 }
 
-fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
-    let rankings = profile.data.get_labels_rankings();
+fn spendings(profile: &Profile, view: &View) -> Container<'static, Message> {
+    let rankings = profile.data.get_labels_rankings(Some(3));
     let _ = spendings_chart::draw(&rankings);
 
     container(column!(
@@ -204,7 +210,7 @@ fn spendings(profile: &Profile, _view: &View) -> Container<'static, Message> {
             )
             .width(Length::Fill)
             .style(Color::from([0.2235, 0.0, 0.5294]))
-            .size(30)
+            .size(ViewSize::Title.get_size(view))
             .horizontal_alignment(alignment::Horizontal::Left),
         row!(
             container(svg(svg::Handle::from_path("assets/pie-chart.svg")))
