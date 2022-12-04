@@ -14,7 +14,7 @@ pub struct Data {
     accounts: Vec<Account>,
     labels: Vec<Label>,
     #[serde(skip_serializing)]
-    account_id: Option<u64>,
+    account_id: Option<usize>,
 }
 
 impl Default for Data {
@@ -55,7 +55,7 @@ impl Data {
         }
     }
 
-    pub fn get_label_by_id(&self, label_id: Option<u16>) -> Option<Label> {
+    pub fn get_label_by_id(&self, label_id: Option<usize>) -> Option<Label> {
         match label_id {
             Some(label_id) => {
                 for label in &self.labels {
@@ -70,7 +70,7 @@ impl Data {
     }
 
     pub fn get_labels_rankings(&self, limit: Option<u32>) -> Vec<(Option<Label>, f64)> {
-        let mut ranking: HashMap<Option<u16>, f64> = HashMap::new();
+        let mut ranking: HashMap<Option<usize>, f64> = HashMap::new();
 
         for account in &self.accounts {
             for bill in account.get_bills() {
@@ -133,7 +133,7 @@ impl Data {
         account.register(id);
     }
 
-    pub fn get_account(&mut self, id: u64) -> Option<&mut Account> {
+    pub fn get_account(&mut self, id: usize) -> Option<&mut Account> {
         for account in &mut self.accounts {
             if id == account.get_account_id() {
                 return Some(account);
@@ -150,7 +150,16 @@ impl Data {
         &self.labels
     }
 
-    pub fn add_label(&mut self, label: Label) {
+    pub fn add_label(&mut self, mut label: Label) {
+        // We retrieve the highest label id
+        let mut highest_id = 0;
+        for label in &self.labels {
+            if label.id > highest_id {
+                highest_id = label.id;
+            }
+        }
+
+        label.id = highest_id + 1;
         self.labels.push(label);
     }
 }

@@ -9,7 +9,7 @@ use crate::entity::menu::*;
 use crate::entity::navbar::navbar_container;
 use crate::stylesheet::ContainerType;
 use crate::view::View;
-use crate::{handler, Language, Message};
+use crate::{handler, FieldSettings, Language, Message, UpdateBox};
 
 pub fn launch() -> iced::Result {
     Grisked::run(Settings {
@@ -24,6 +24,7 @@ struct Grisked {
     language: Language,
     view: View,
     pub profile: Profile,
+    pub field_settings: FieldSettings,
 }
 
 impl Application for Grisked {
@@ -66,8 +67,16 @@ impl Application for Grisked {
                     .add_bill(bill);
             }
             Message::AddLabel(label) => {
-                self.profile.data.add_label(label);
+                if label.name != "" {
+                    self.field_settings.label_name = String::new();
+                    self.profile.data.add_label(label);
+                }
             }
+            Message::UpdateBox(value) => match value {
+                UpdateBox::LabelName(name) => {
+                    self.field_settings.label_name = name;
+                }
+            },
         }
         Command::none()
     }
@@ -76,9 +85,12 @@ impl Application for Grisked {
         let navbar_container =
             navbar_container(&self.menu_type, self.language.clone(), self.view.clone());
 
-        let context = self
-            .menu_type
-            .get_container(&self.profile, &self.language, &self.view);
+        let context = self.menu_type.get_container(
+            &self.profile,
+            &self.language,
+            &self.view,
+            &self.field_settings,
+        );
         match context {
             Some(context) => {
                 let content = column![navbar_container, context];

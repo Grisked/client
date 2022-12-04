@@ -6,7 +6,7 @@ use crate::models::bill::Bill;
 pub struct Account {
     pub name: String,
     #[serde(skip_serializing)]
-    id: Option<u64>,
+    id: Option<usize>,
     default_balance: f64,
     bills: Vec<Bill>,
     pub color: [f32; 3],
@@ -65,11 +65,11 @@ impl Account {
     }
 
     /// Internal id
-    pub fn get_account_id(&self) -> u64 {
+    pub fn get_account_id(&self) -> usize {
         self.id.unwrap()
     }
 
-    pub fn register(&mut self, id: u64) {
+    pub fn register(&mut self, id: usize) {
         self.id = Some(id);
     }
 }

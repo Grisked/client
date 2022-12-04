@@ -1,9 +1,15 @@
-use grisked_profile::{models::account::Account, profile::Profile};
+use grisked_profile::{
+    models::{account::Account, label::Label},
+    profile::Profile,
+};
 use iced::{
     alignment,
     alignment::Alignment,
     theme,
-    widget::{button, column, container, row, svg, text, Button, Canvas, Column, Container, Row},
+    widget::{
+        button, column, container, row, svg, text, text_input, Button, Canvas, Column, Container,
+        Row,
+    },
     Color, Length,
 };
 
@@ -12,12 +18,16 @@ use crate::{
     font::{FontFamily, FontType},
     stylesheet::{label_square::LabelSquare, ButtonType, ContainerType},
     view::View,
-    Message,
+    FieldSettings, Message, UpdateBox,
 };
 
-pub fn accounts(profile: &Profile, view: &View) -> Container<'static, Message> {
+pub fn accounts(
+    profile: &Profile,
+    view: &View,
+    field_settings: &FieldSettings,
+) -> Container<'static, Message> {
     let accounts = list_accounts(profile, view);
-    let top = top_side(profile, view);
+    let top = top_side(profile, view, field_settings);
     let bottom = bottom_side(profile, view);
 
     let container: Container<Message> =
@@ -97,7 +107,11 @@ fn list_accounts(profile: &Profile, view: &View) -> Container<'static, Message> 
     ))
 }
 
-fn top_side(profile: &Profile, view: &View) -> Column<'static, Message> {
+fn top_side(
+    profile: &Profile,
+    view: &View,
+    field_settings: &FieldSettings,
+) -> Column<'static, Message> {
     column!(
         // Titres du haut
         row!(
@@ -115,7 +129,11 @@ fn top_side(profile: &Profile, view: &View) -> Column<'static, Message> {
                 .horizontal_alignment(alignment::Horizontal::Center),
         )
         .spacing(50),
-        row!(add_account(profile, view), add_label(profile, view)).spacing(50)
+        row!(
+            add_account(profile, view),
+            add_label(profile, view, field_settings)
+        )
+        .spacing(50)
     )
 }
 
@@ -141,14 +159,22 @@ fn bottom_side(profile: &Profile, view: &View) -> Column<'static, Message> {
     )
 }
 
-fn add_label(_profile: &Profile, _view: &View) -> Container<'static, Message> {
+fn add_label(
+    _profile: &Profile,
+    _view: &View,
+    field_settings: &FieldSettings,
+) -> Container<'static, Message> {
     // Case au haut à droite
     container(column!(row!(
         container(column!(
-            container(column!(text("Nom du label"),))
-                .style(theme::Container::Custom(ContainerType::Box.get_box()))
-                .width(Length::FillPortion(7))
-                .padding(10),
+            container(column!(text_input(
+                "Nom du label",
+                &field_settings.label_name,
+                |m| { Message::UpdateBox(UpdateBox::LabelName(m)) }
+            )))
+            .style(theme::Container::Custom(ContainerType::Box.get_box()))
+            .width(Length::FillPortion(7))
+            .padding(10),
             text(" "),
             container(column!(row!(
                 text("Couleur").width(Length::Fill),
@@ -164,7 +190,12 @@ fn add_label(_profile: &Profile, _view: &View) -> Container<'static, Message> {
         .padding(10),
         button(svg(svg::Handle::from_path("assets/add_button.svg")))
             .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
-            .width(Length::Units(48)),
+            .width(Length::Units(48))
+            .on_press(Message::AddLabel(Label::new(
+                0,
+                field_settings.label_name.clone(),
+                [0.0, 0.2, 0.0]
+            ))),
     )
     .align_items(Alignment::Center),))
     .style(theme::Container::Custom(ContainerType::Box.get_box()))

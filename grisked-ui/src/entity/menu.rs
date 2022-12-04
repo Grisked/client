@@ -1,7 +1,7 @@
 use grisked_profile::{models::account::Account, profile::Profile};
 use iced::widget::Container;
 
-use crate::{entity, view::View, Language, Message};
+use crate::{entity, view::View, FieldSettings, Language, Message};
 
 #[derive(Debug, Clone, PartialEq, Default)]
 pub enum MenuType {
@@ -20,10 +20,11 @@ impl MenuType {
         profile: &Profile,
         _language: &Language,
         view: &View,
+        field_settings: &FieldSettings,
     ) -> Option<Container<'static, Message>> {
         match self {
             MenuType::Dashboard => Some(entity::dashboard(profile, view)),
-            MenuType::Accounts => Some(entity::accounts(profile, view)),
+            MenuType::Accounts => Some(entity::accounts(profile, view, field_settings)),
             MenuType::Backup => Some(entity::backup(profile, view)),
             _ => None,
         }

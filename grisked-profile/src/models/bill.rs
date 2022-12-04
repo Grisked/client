@@ -5,11 +5,11 @@ pub struct Bill {
     pub name: String,
     pub price: f64,
     pub due_date: u16,
-    pub label_id: Option<u16>,
+    pub label_id: Option<usize>,
 }
 
 impl Bill {
-    pub fn new(name: String, price: f64, due_date: u16, label_id: Option<u16>) -> Self {
+    pub fn new(name: String, price: f64, due_date: u16, label_id: Option<usize>) -> Self {
         Self {
             name,
             price,

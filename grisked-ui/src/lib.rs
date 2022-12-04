@@ -9,6 +9,16 @@ pub mod handler;
 pub mod stylesheet;
 pub mod view;
 
+#[derive(Default)]
+pub struct FieldSettings {
+    pub label_name: String,
+}
+
+#[derive(Debug, Clone)]
+pub enum UpdateBox {
+    LabelName(String),
+}
+
 #[derive(Debug, Clone)]
 pub enum Message {
     MenuChanged(MenuType),
@@ -16,8 +26,9 @@ pub enum Message {
     SaveRequested,
     AddAccount(Account),
     AddLabel(Label),
-    // account_id: u64
-    AddInvoice(u64, Bill),
+    // usize: account_id
+    AddInvoice(usize, Bill),
+    UpdateBox(UpdateBox),
 }
 
 #[derive(Default, Clone)]
