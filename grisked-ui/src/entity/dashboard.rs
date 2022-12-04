@@ -45,10 +45,7 @@ fn get_bills(bills: &Vec<Bill>, view: &View) -> Column<'static, Message> {
     for bill in bills {
         c_bills = c_bills.push(
             row!(
-                text("• ")
-                    .size(ViewSize::Text.get_size(view))
-                    .vertical_alignment(alignment::Vertical::Center)
-                    .height(Length::Units(20)),
+                text("• ").size(ViewSize::Text.get_size(view)),
                 FontType::Text
                     .get_text(bill.name.clone(), FontFamily::Kanit)
                     .size(ViewSize::Text.get_size(view)),
@@ -75,10 +72,7 @@ fn get_bills(bills: &Vec<Bill>, view: &View) -> Column<'static, Message> {
 fn get_account(account: &Account, view: &View) -> Column<'static, Message> {
     column!(
         row!(
-            text("• ")
-                .size(ViewSize::Text.get_size(view))
-                .vertical_alignment(alignment::Vertical::Center)
-                .height(Length::Units(25)),
+            text("• ").size(ViewSize::Text.get_size(view)),
             FontType::TextBold
                 .get_text(account.name.clone(), FontFamily::Kanit)
                 .size(ViewSize::Text.get_size(view)),
@@ -120,16 +114,68 @@ fn recent_accounts(profile: &Profile, view: &View) -> Container<'static, Message
     container
 }
 
-fn deadlines(_profile: &Profile, _view: &View) -> Container<'static, Message> {
+fn deadlines(_profile: &Profile, view: &View) -> Container<'static, Message> {
     container(column!(
-        text("Echéances en cours")
-            .width(Length::Fill)
-            .horizontal_alignment(alignment::Horizontal::Center),
-        row!(text(" ")),
-        row!(text("Prêt de la 4090 RTX"), text("834€")).spacing(20),
+        button(
+            FontType::Title
+                .get_text("Echéances en cours".to_string(), FontFamily::IndieFlower)
+                .width(Length::Fill)
+                .style(Color::from([0.2235, 0.0, 0.5294]))
+                .size(ViewSize::Title.get_size(view))
+                .horizontal_alignment(alignment::Horizontal::Left)
+        )
+        .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
+        .on_press(Message::MenuChanged(MenuType::Deadlines)),
+        {
+            let mut column = Column::new();
+            column = column.push(row!(
+                text("• ")
+                    .size(ViewSize::Text.get_size(view))
+                    .vertical_alignment(alignment::Vertical::Center)
+                    .height(Length::Units(20)),
+                FontType::Text
+                    .get_text("RTX 2060".to_string(), FontFamily::Kanit)
+                    .size(ViewSize::Text.get_size(view)),
+                FontType::Text
+                    .get_text("400.00 €".to_string(), FontFamily::Kanit)
+                    .horizontal_alignment(alignment::Horizontal::Right)
+                    .size(ViewSize::Text.get_size(view))
+                    .width(Length::Fill),
+            ));
+            column = column.push(row!(
+                text("• ")
+                    .size(ViewSize::Text.get_size(view))
+                    .vertical_alignment(alignment::Vertical::Center)
+                    .height(Length::Units(20)),
+                FontType::Text
+                    .get_text("RTX 2060".to_string(), FontFamily::Kanit)
+                    .size(ViewSize::Text.get_size(view)),
+                FontType::Text
+                    .get_text("400.00 €".to_string(), FontFamily::Kanit)
+                    .horizontal_alignment(alignment::Horizontal::Right)
+                    .size(ViewSize::Text.get_size(view))
+                    .width(Length::Fill),
+            ));
+            column = column.push(row!(
+                text("• ")
+                    .size(ViewSize::Text.get_size(view))
+                    .vertical_alignment(alignment::Vertical::Center)
+                    .height(Length::Units(20)),
+                FontType::Text
+                    .get_text("RTX 2060".to_string(), FontFamily::Kanit)
+                    .size(ViewSize::Text.get_size(view)),
+                FontType::Text
+                    .get_text("400.00 €".to_string(), FontFamily::Kanit)
+                    .horizontal_alignment(alignment::Horizontal::Right)
+                    .size(ViewSize::Text.get_size(view))
+                    .width(Length::Fill),
+            ));
+            column
+        },
     ))
     .style(theme::Container::Custom(ContainerType::Box.get_box()))
     .padding(20)
+    .width(Length::Fill)
 }
 
 fn beautify_legend(name: String, color: [f32; 3]) -> Column<'static, Message> {
