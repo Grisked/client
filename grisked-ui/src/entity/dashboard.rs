@@ -184,13 +184,15 @@ fn deadlines(_profile: &Profile, view: &View) -> Container<'static, Message> {
     .width(Length::Fill)
 }
 
-fn beautify_legend(name: String, color: [f32; 3]) -> Column<'static, Message> {
+fn beautify_legend(name: String, color: [f32; 3], view: &View) -> Column<'static, Message> {
     column!(row!(
         text(" ").width(Length::Units(20)),
         Canvas::new(LabelSquare::new(color))
-            .width(Length::Units(25))
-            .height(Length::Units(25)),
-        text(name),
+            .width(Length::Units(ViewSize::Text.get_size(view)))
+            .height(Length::Units(ViewSize::Text.get_size(view))),
+        FontType::TextBold
+            .get_text(name, FontFamily::Kanit)
+            .size(ViewSize::Text.get_size(view)),
         text(" ").width(Length::Units(20)),
     )
     .spacing(10)
@@ -222,19 +224,25 @@ fn spendings(profile: &Profile, view: &View) -> Container<'static, Message> {
                     for ranking in rankings {
                         match ranking.0 {
                             Some(ranking) => {
-                                column = column
-                                    .push(beautify_legend(ranking.name.clone(), ranking.color))
+                                column = column.push(beautify_legend(
+                                    ranking.name.clone(),
+                                    ranking.color,
+                                    view,
+                                ))
                             }
                             None => {
-                                column = column
-                                    .push(beautify_legend("Autre".to_string(), [0.5, 0.5, 0.5]))
+                                column = column.push(beautify_legend(
+                                    "Autre".to_string(),
+                                    [0.5, 0.5, 0.5],
+                                    view,
+                                ))
                             }
                         };
                     }
                     column = column.push(column!(text(" ")));
                     column
                 }
-                .width(Length::Shrink)
+                .width(Length::FillPortion(3))
             )
             .style(theme::Container::Custom(ContainerType::Box.get_box()))
         )
