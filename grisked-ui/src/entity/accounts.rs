@@ -1,5 +1,5 @@
 use grisked_profile::{
-    models::{account::Account, label::Label},
+    models::{account::Account},
     profile::Profile,
 };
 use iced::{
@@ -28,7 +28,7 @@ pub fn accounts(
 ) -> Container<'static, Message> {
     let accounts = list_accounts(profile, view);
     let top = top_side(profile, view, field_settings);
-    let bottom = bottom_side(profile, view);
+    let bottom = bottom_side(profile, view, field_settings);
 
     let container: Container<Message> =
         container(column!(accounts, column!(top, bottom).spacing(50)))
@@ -130,14 +130,18 @@ fn top_side(
         )
         .spacing(50),
         row!(
-            add_account(profile, view),
+            add_account(profile, view, field_settings),
             add_label(profile, view, field_settings)
         )
         .spacing(50)
     )
 }
 
-fn bottom_side(profile: &Profile, view: &View) -> Column<'static, Message> {
+fn bottom_side(
+    profile: &Profile,
+    view: &View,
+    field_settings: &FieldSettings,
+) -> Column<'static, Message> {
     column!(
         // Titres du bas
         row!(
@@ -155,7 +159,11 @@ fn bottom_side(profile: &Profile, view: &View) -> Column<'static, Message> {
                 .horizontal_alignment(alignment::Horizontal::Center),
         )
         .spacing(50),
-        row!(add_invoice(profile, view), add_income(profile, view)).spacing(50)
+        row!(
+            add_invoice(profile, view, field_settings),
+            add_income(profile, view, field_settings)
+        )
+        .spacing(50)
     )
 }
 
@@ -191,11 +199,7 @@ fn add_label(
         button(svg(svg::Handle::from_path("assets/add_button.svg")))
             .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
             .width(Length::Units(48))
-            .on_press(Message::AddLabel(Label::new(
-                0,
-                field_settings.label_name.clone(),
-                [0.0, 0.2, 0.0]
-            ))),
+            .on_press(Message::AddLabel),
     )
     .align_items(Alignment::Center),))
     .style(theme::Container::Custom(ContainerType::Box.get_box()))
@@ -203,18 +207,28 @@ fn add_label(
     .padding(10)
 }
 
-fn add_account(_profile: &Profile, _view: &View) -> Container<'static, Message> {
+fn add_account(
+    _profile: &Profile,
+    _view: &View,
+    field_settings: &FieldSettings,
+) -> Container<'static, Message> {
     // Case en haut à gauche
     container(column!(row!(
         container(column!(
-            container(column!(text("Nom du compte"),))
-                .style(theme::Container::Custom(ContainerType::Box.get_box()))
-                .width(Length::FillPortion(7))
-                .padding(10),
+            container(container(column!(text_input(
+                "Nom du compte",
+                &field_settings.account_name,
+                |m| { Message::UpdateBox(UpdateBox::AccountName(m)) }
+            ))))
+            .style(theme::Container::Custom(ContainerType::Box.get_box()))
+            .width(Length::FillPortion(7))
+            .padding(10),
             text(" "),
             row!(
                 container(column!(row!(
-                    text("Solde"),
+                    text_input("Solde", &field_settings.account_default_balance, |m| {
+                        Message::UpdateBox(UpdateBox::AccountDefaultBalance(m))
+                    }),
                     text("€")
                         .horizontal_alignment(alignment::Horizontal::Right)
                         .width(Length::Fill),
@@ -238,7 +252,8 @@ fn add_account(_profile: &Profile, _view: &View) -> Container<'static, Message> 
         .padding(10),
         button(svg(svg::Handle::from_path("assets/add_button.svg")))
             .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
-            .width(Length::Units(48)),
+            .width(Length::Units(48))
+            .on_press(Message::AddAccount),
     )
     .align_items(Alignment::Center),))
     .style(theme::Container::Custom(ContainerType::Box.get_box()))
@@ -246,18 +261,28 @@ fn add_account(_profile: &Profile, _view: &View) -> Container<'static, Message> 
     .padding(10)
 }
 
-fn add_income(_profile: &Profile, _view: &View) -> Container<'static, Message> {
+fn add_income(
+    _profile: &Profile,
+    _view: &View,
+    field_settings: &FieldSettings,
+) -> Container<'static, Message> {
     // Case en bas à droite
     container(column!(row!(
         container(column!(
-            container(column!(text("Nom de la facture"),))
-                .style(theme::Container::Custom(ContainerType::Box.get_box()))
-                .width(Length::FillPortion(7))
-                .padding(10),
+            container(container(column!(text_input(
+                "Nom du revenu",
+                &field_settings.income_name,
+                |m| { Message::UpdateBox(UpdateBox::IncomeName(m)) }
+            ))))
+            .style(theme::Container::Custom(ContainerType::Box.get_box()))
+            .width(Length::FillPortion(7))
+            .padding(10),
             text(" "),
             row!(
                 container(column!(row!(
-                    text("Montant"),
+                    text_input("Montant", &field_settings.income_amount, |m| {
+                        Message::UpdateBox(UpdateBox::IncomeAmount(m))
+                    }),
                     text("€")
                         .horizontal_alignment(alignment::Horizontal::Right)
                         .width(Length::Fill),
@@ -276,7 +301,8 @@ fn add_income(_profile: &Profile, _view: &View) -> Container<'static, Message> {
         .padding(10),
         button(svg(svg::Handle::from_path("assets/add_button.svg")))
             .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
-            .width(Length::Units(48)),
+            .width(Length::Units(48))
+            .on_press(Message::AddIncome),
     )
     .align_items(Alignment::Center),))
     .style(theme::Container::Custom(ContainerType::Box.get_box()))
@@ -284,17 +310,27 @@ fn add_income(_profile: &Profile, _view: &View) -> Container<'static, Message> {
     .padding(10)
 }
 
-fn add_invoice(_profile: &Profile, _view: &View) -> Container<'static, Message> {
+fn add_invoice(
+    _profile: &Profile,
+    _view: &View,
+    field_settings: &FieldSettings,
+) -> Container<'static, Message> {
     // Case en bas à gauche
     container(column!(row!(
         container(column!(
             row!(
-                container(column!(text("Nom de la facture"),))
-                    .style(theme::Container::Custom(ContainerType::Box.get_box()))
-                    .width(Length::FillPortion(2))
-                    .padding(10),
+                container(container(column!(text_input(
+                    "Nom de la facture",
+                    &field_settings.invoice_name,
+                    |m| { Message::UpdateBox(UpdateBox::InvoiceName(m)) }
+                ))))
+                .style(theme::Container::Custom(ContainerType::Box.get_box()))
+                .width(Length::FillPortion(2))
+                .padding(10),
                 container(column!(row!(
-                    text("Montant"),
+                    text_input("Montant", &field_settings.invoice_amount, |m| {
+                        Message::UpdateBox(UpdateBox::InvoiceAmount(m))
+                    }),
                     text("€")
                         .horizontal_alignment(alignment::Horizontal::Right)
                         .width(Length::Fill),
@@ -325,7 +361,8 @@ fn add_invoice(_profile: &Profile, _view: &View) -> Container<'static, Message> 
         .padding(10),
         button(svg(svg::Handle::from_path("assets/add_button.svg")))
             .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
-            .width(Length::Units(48)),
+            .width(Length::Units(48))
+            .on_press(Message::AddInvoice),
     )
     .align_items(Alignment::Center),))
     .style(theme::Container::Custom(ContainerType::Box.get_box()))

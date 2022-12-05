@@ -1,5 +1,5 @@
 use entity::menu::MenuType;
-use grisked_profile::models::{account::Account, bill::Bill, label::Label};
+
 use iced::keyboard::{KeyCode, Modifiers};
 
 pub mod app;
@@ -12,11 +12,23 @@ pub mod view;
 #[derive(Default)]
 pub struct FieldSettings {
     pub label_name: String,
+    pub account_name: String,
+    pub account_default_balance: String,
+    pub invoice_name: String,
+    pub income_name: String,
+    pub invoice_amount: String,
+    pub income_amount: String,
 }
 
 #[derive(Debug, Clone)]
 pub enum UpdateBox {
     LabelName(String),
+    AccountName(String),
+    InvoiceName(String),
+    IncomeName(String),
+    InvoiceAmount(String),
+    IncomeAmount(String),
+    AccountDefaultBalance(String),
 }
 
 #[derive(Debug, Clone)]
@@ -24,10 +36,10 @@ pub enum Message {
     MenuChanged(MenuType),
     KeyPressed(KeyCode, Modifiers),
     SaveRequested,
-    AddAccount(Account),
-    AddLabel(Label),
-    // usize: account_id
-    AddInvoice(usize, Bill),
+    AddAccount,
+    AddLabel,
+    AddInvoice,
+    AddIncome,
     UpdateBox(UpdateBox),
 }
 

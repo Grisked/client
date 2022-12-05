@@ -56,25 +56,48 @@ impl Application for Grisked {
                 println!("Saving json files !");
                 self.profile.save();
             }
-            Message::AddAccount(account) => {
-                self.profile.data.register_account(account);
+            Message::AddAccount => {
+                // Check if every field is correct
+                self.field_settings.account_name = String::new();
+                self.field_settings.account_default_balance = String::new();
             }
-            Message::AddInvoice(account_id, bill) => {
-                self.profile
-                    .data
-                    .get_account(account_id)
-                    .unwrap()
-                    .add_bill(bill);
-            }
-            Message::AddLabel(label) => {
-                if label.name != "" {
+            Message::AddLabel => {
+                // Check if every field is corect
+                if self.field_settings.label_name != "" {
                     self.field_settings.label_name = String::new();
-                    self.profile.data.add_label(label);
                 }
+            }
+            Message::AddInvoice => {
+                // Check if every field is correct
+                self.field_settings.invoice_name = String::new();
+                self.field_settings.invoice_amount = String::new();
+            }
+            Message::AddIncome => {
+                // Check if every field is correct
+                self.field_settings.income_name = String::new();
+                self.field_settings.invoice_amount = String::new();
             }
             Message::UpdateBox(value) => match value {
                 UpdateBox::LabelName(name) => {
                     self.field_settings.label_name = name;
+                }
+                UpdateBox::AccountName(name) => {
+                    self.field_settings.account_name = name;
+                }
+                UpdateBox::InvoiceName(name) => {
+                    self.field_settings.invoice_name = name;
+                }
+                UpdateBox::IncomeName(name) => {
+                    self.field_settings.income_name = name;
+                }
+                UpdateBox::InvoiceAmount(amount) => {
+                    self.field_settings.invoice_amount = amount;
+                }
+                UpdateBox::IncomeAmount(amount) => {
+                    self.field_settings.income_amount = amount;
+                }
+                UpdateBox::AccountDefaultBalance(balance) => {
+                    self.field_settings.account_default_balance = balance;
                 }
             },
         }
