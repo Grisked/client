@@ -7,6 +7,8 @@ use crate::{
     serde_utils::{load_json, save_json},
 };
 
+use super::bill::BillType;
+
 #[derive(Serialize, Deserialize)]
 pub struct Data {
     #[serde(skip_serializing)]
@@ -74,7 +76,7 @@ impl Data {
 
         for account in &self.accounts {
             for bill in account.get_bills() {
-                if bill.price >= 0.0 {
+                if bill.bill_type != BillType::Invoice {
                     continue;
                 }
                 match ranking.get_key_value(&bill.label_id) {
@@ -89,7 +91,7 @@ impl Data {
             .map(|(label, price)| (self.get_label_by_id(*label), *price))
             .collect();
         vec.sort_by(|&(_, a), &(_, b)| {
-            if a > b {
+            if a < b {
                 Ordering::Greater
             } else {
                 Ordering::Less

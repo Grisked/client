@@ -1,5 +1,5 @@
 use grisked_profile::profile::Profile;
 
-pub fn save(profile: &mut Profile) {
+pub fn save(profile: &Profile) {
     profile.save();
 }

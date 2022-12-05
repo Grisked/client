@@ -1,4 +1,5 @@
 use grisked_profile::models::account::Account;
+use grisked_profile::models::bill::{Bill, BillType};
 use iced::widget::{column, container};
 use iced::{executor, theme};
 use iced::{subscription, Subscription};
@@ -20,10 +21,10 @@ pub fn launch() -> iced::Result {
 }
 
 #[derive(Default)]
-struct Grisked {
-    menu_type: MenuType,
-    language: Language,
-    view: View,
+pub struct Grisked {
+    pub menu_type: MenuType,
+    pub language: Language,
+    pub view: View,
     pub profile: Profile,
     pub field_settings: FieldSettings,
 }
@@ -51,7 +52,7 @@ impl Application for Grisked {
         match message {
             Message::MenuChanged(menu_type) => self.menu_type = menu_type,
             Message::KeyPressed(keycode, modifiers) => {
-                handler::handle(keycode, modifiers, &mut self.view, &mut self.profile);
+                handler::handle_keys(keycode, modifiers, self);
             }
             Message::PreviousAccount => {
                 if self.field_settings.account_id > 0 {
@@ -92,8 +93,29 @@ impl Application for Grisked {
             }
             Message::AddInvoice => {
                 // Check if every field is correct
-                self.field_settings.invoice_name = String::new();
-                self.field_settings.invoice_amount = String::new();
+                match self.field_settings.invoice_amount.parse::<f64>() {
+                    Ok(invoice_amount) => {
+                        match self
+                            .profile
+                            .data
+                            .get_account(self.field_settings.account_id)
+                        {
+                            Some(account) => {
+                                account.add_bill(Bill::new(
+                                    BillType::Invoice,
+                                    self.field_settings.invoice_name.clone(),
+                                    invoice_amount,
+                                    121,
+                                    None,
+                                ));
+                                self.field_settings.invoice_name = String::new();
+                                self.field_settings.invoice_amount = String::new();
+                            }
+                            _ => {}
+                        }
+                    }
+                    _ => {}
+                }
             }
             Message::AddIncome => {
                 // Check if every field is correct
