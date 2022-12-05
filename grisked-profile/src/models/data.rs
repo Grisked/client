@@ -51,6 +51,8 @@ impl Data {
         match load_json::<Self>(path.clone()) {
             Ok(mut result) => {
                 result.path = Some(path);
+                result.account_id = Some(0);
+                result.register_accounts();
                 Ok(result)
             }
             Err(err) => Err(err),
