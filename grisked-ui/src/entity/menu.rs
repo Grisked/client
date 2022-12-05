@@ -25,6 +25,9 @@ impl MenuType {
         match self {
             MenuType::Dashboard => Some(entity::dashboard(profile, view)),
             MenuType::Accounts => Some(entity::accounts(profile, view, field_settings)),
+            MenuType::AccountData(account) => {
+                Some(entity::accountsdata(profile, view, field_settings, account))
+            }
             MenuType::Backup => Some(entity::backup(profile, view)),
             _ => None,
         }
