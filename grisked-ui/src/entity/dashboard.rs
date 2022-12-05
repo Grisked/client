@@ -258,7 +258,7 @@ fn pins(_profile: &Profile, view: &View) -> Container<'static, Message> {
             .get_text("Rappels".to_string(), FontFamily::IndieFlower)
             .width(Length::Fill)
             .style(Color::from([0.2235, 0.0, 0.5294]))
-            .size(30)
+            .size(ViewSize::Title.get_size(view))
             .horizontal_alignment(alignment::Horizontal::Left),
         {
             let mut column = Column::new().spacing(10);

@@ -15,6 +15,7 @@ pub enum ButtonType {
     RegularIgnored,
     BoxIgnored,
     AccountIgnored([f32; 3]),
+    AccountEmpty,
 }
 
 impl ButtonType {
@@ -24,6 +25,7 @@ impl ButtonType {
             Self::BoxIgnored => Box::new(box_button::IgnoredButton),
             Self::RegularIgnored => Box::new(regular_button::IgnoredButton),
             Self::AccountIgnored(color) => Box::new(account_button::IgnoredButton(color)),
+            Self::AccountEmpty => Box::new(account_button::EmptyButton),
         }
     }
 }

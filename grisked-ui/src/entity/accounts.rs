@@ -1,7 +1,4 @@
-use grisked_profile::{
-    models::{account::Account},
-    profile::Profile,
-};
+use grisked_profile::{models::account::Account, profile::Profile};
 use iced::{
     alignment,
     alignment::Alignment,
@@ -26,7 +23,7 @@ pub fn accounts(
     view: &View,
     field_settings: &FieldSettings,
 ) -> Container<'static, Message> {
-    let accounts = list_accounts(profile, view);
+    let accounts = list_accounts(profile, view, field_settings);
     let top = top_side(profile, view, field_settings);
     let bottom = bottom_side(profile, view, field_settings);
 
@@ -38,7 +35,7 @@ pub fn accounts(
     container
 }
 
-fn account_scroll(text: &str, _view: &View) -> Button<'static, Message> {
+fn account_scroll(text: &str, _view: &View, message: Message) -> Button<'static, Message> {
     button(
         FontType::Title
             .get_text(text.to_string(), FontFamily::Kanit)
@@ -49,13 +46,12 @@ fn account_scroll(text: &str, _view: &View) -> Button<'static, Message> {
     )
     .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
     .width(Length::FillPortion(1))
+    .on_press(message)
 }
 
 fn get_account(account: Account, _view: &View, is_selected: bool) -> Button<'static, Message> {
-    let size = match is_selected {
-        true => 40,
-        false => 20,
-    };
+    let size = if is_selected { 30 } else { 20 };
+
     button(container(column!(
         FontType::Title
             .get_text(account.name.clone(), FontFamily::Kanit)
@@ -74,7 +70,28 @@ fn get_account(account: Account, _view: &View, is_selected: bool) -> Button<'sta
     .width(Length::FillPortion(1))
 }
 
-fn list_accounts(profile: &Profile, view: &View) -> Container<'static, Message> {
+fn empty_account(_view: &View) -> Button<'static, Message> {
+    button(container(column!(
+        FontType::Title
+            .get_text("".to_string(), FontFamily::Kanit)
+            .horizontal_alignment(alignment::Horizontal::Center)
+            .width(Length::Fill)
+            .size(20),
+        text(format!(""))
+            .horizontal_alignment(alignment::Horizontal::Center)
+            .width(Length::Fill)
+            .size(20),
+    )))
+    .height(Length::Units(20))
+    .style(theme::Button::Custom(ButtonType::AccountEmpty.get_box()))
+    .width(Length::FillPortion(1))
+}
+
+fn list_accounts(
+    profile: &Profile,
+    view: &View,
+    field_settings: &FieldSettings,
+) -> Container<'static, Message> {
     // Header
     container(column!(
         FontType::Title
@@ -86,15 +103,33 @@ fn list_accounts(profile: &Profile, view: &View) -> Container<'static, Message> 
         // Selecteur de comptes
         {
             let mut row = Row::new();
+            let mut prints = 0;
 
-            row = row.push(account_scroll("<", view));
-            for (i, account) in profile.data.get_accounts().iter().enumerate() {
-                if i > 2 {
+            row = row.push(account_scroll("<", view, Message::PreviousAccount));
+            if field_settings.account_id == 0 {
+                row = row.push(empty_account(view));
+                prints += 1;
+            }
+            for i in 0..3 {
+                if prints > 2 {
                     break;
                 }
-                row = row.push(get_account(account.clone(), view, i == 1));
+                if (i as i32) - 1 + (field_settings.account_id as i32) < 0 {
+                    continue;
+                }
+                match profile
+                    .data
+                    .get_accounts()
+                    .get((i + field_settings.account_id) - 1)
+                {
+                    Some(account) => {
+                        row = row.push(get_account(account.clone(), view, prints == 1))
+                    }
+                    None => row = row.push(empty_account(view)),
+                };
+                prints += 1;
             }
-            row = row.push(account_scroll(">", view));
+            row = row.push(account_scroll(">", view, Message::NextAccount));
             row
         }
         .spacing(10)

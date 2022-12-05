@@ -18,6 +18,7 @@ pub struct FieldSettings {
     pub income_name: String,
     pub invoice_amount: String,
     pub income_amount: String,
+    pub account_id: usize,
 }
 
 #[derive(Debug, Clone)]
@@ -35,6 +36,8 @@ pub enum UpdateBox {
 pub enum Message {
     MenuChanged(MenuType),
     KeyPressed(KeyCode, Modifiers),
+    PreviousAccount,
+    NextAccount,
     SaveRequested,
     AddAccount,
     AddLabel,

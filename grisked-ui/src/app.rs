@@ -52,6 +52,16 @@ impl Application for Grisked {
             Message::KeyPressed(keycode, modifiers) => {
                 handler::zoom::handle(keycode, modifiers, &mut self.view)
             }
+            Message::PreviousAccount => {
+                if self.field_settings.account_id > 0 {
+                    self.field_settings.account_id -= 1;
+                }
+            }
+            Message::NextAccount => {
+                if self.field_settings.account_id < self.profile.data.get_accounts().len() - 1 {
+                    self.field_settings.account_id += 1;
+                }
+            }
             Message::SaveRequested => {
                 println!("Saving json files !");
                 self.profile.save();
