@@ -7,7 +7,10 @@ use iced::{
 };
 
 use grisked_profile::{
-    models::{account::Account, bill::Bill},
+    models::{
+        account::Account,
+        bill::{Bill, BillType},
+    },
     profile::Profile,
 };
 
@@ -56,7 +59,7 @@ fn get_bills(bills: &Vec<Bill>, view: &View) -> Column<'static, Message> {
                     let mut text = FontType::Text
                         .get_text(bill.pretty_price(), FontFamily::Kanit)
                         .size(ViewSize::Text.get_size(view));
-                    if bill.price < 0.0 {
+                    if bill.bill_type == BillType::Invoice {
                         text = text.style(Color::from([(189.0 / 255.0), 0.0, 0.0]))
                     } else {
                         text = text.style(Color::from([0.0, (134.0 / 255.0), 0.0]))

@@ -101,8 +101,29 @@ impl Application for Grisked {
             }
             Message::AddIncome => {
                 // Check if every field is correct
-                self.field_settings.income_name = String::new();
-                self.field_settings.invoice_amount = String::new();
+                match self.field_settings.income_amount.parse::<f64>() {
+                    Ok(invoice_amount) => {
+                        match self
+                            .profile
+                            .data
+                            .get_account(self.field_settings.account_id)
+                        {
+                            Some(account) => {
+                                account.add_bill(Bill::new(
+                                    BillType::Income,
+                                    self.field_settings.income_name.clone(),
+                                    invoice_amount,
+                                    121,
+                                    None,
+                                ));
+                                self.field_settings.income_name = String::new();
+                                self.field_settings.income_amount = String::new();
+                            }
+                            _ => {}
+                        }
+                    }
+                    _ => {}
+                }
             }
             Message::UpdateBox(value) => {
                 update_box::handle(value, self);

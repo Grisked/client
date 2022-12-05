@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::models::bill::Bill;
 
+use super::bill::BillType;
+
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 pub struct Account {
     pub name: String,
@@ -54,9 +56,26 @@ impl Account {
         let mut balance: f64 = self.default_balance;
 
         for bill in &self.bills {
-            balance += bill.price;
+            match bill.bill_type {
+                BillType::Income => {
+                    balance += bill.price;
+                }
+                BillType::Invoice => {
+                    balance -= bill.price;
+                }
+            };
         }
         balance
+    }
+
+    pub fn pretty_account_balance(&self) -> String {
+        let balance = self.get_account_balance();
+
+        if balance > 0.0 {
+            format!("+{:0.2} €", balance)
+        } else {
+            format!("{:0.2} €", balance)
+        }
     }
 
     /// Returns the account balance if every bills were already dued.
