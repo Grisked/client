@@ -9,6 +9,19 @@ mod box_button;
 mod custom_box;
 mod navbar;
 mod regular_button;
+mod transparent_input;
+
+pub enum TextInputType {
+    Transparent,
+}
+
+impl TextInputType {
+    pub fn get_box(self) -> Box<dyn widget::text_input::StyleSheet<Style = Theme> + 'static> {
+        match self {
+            Self::Transparent => Box::new(transparent_input::TransparentInput),
+        }
+    }
+}
 
 pub enum ButtonType {
     RegularSelected,

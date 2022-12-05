@@ -13,7 +13,7 @@ use iced::{
 use crate::{
     entity::menu::MenuType,
     font::{FontFamily, FontType},
-    stylesheet::{label_square::LabelSquare, ButtonType, ContainerType},
+    stylesheet::{label_square::LabelSquare, ButtonType, ContainerType, TextInputType},
     view::View,
     FieldSettings, Message, UpdateBox,
 };
@@ -214,7 +214,10 @@ fn add_label(
                 "Nom du label",
                 &field_settings.label_name,
                 |m| { Message::UpdateBox(UpdateBox::LabelName(m)) }
-            )))
+            )
+            .style(theme::TextInput::Custom(
+                TextInputType::Transparent.get_box()
+            ))))
             .style(theme::Container::Custom(ContainerType::Box.get_box()))
             .width(Length::FillPortion(7))
             .padding(10),
@@ -254,7 +257,10 @@ fn add_account(
                 "Nom du compte",
                 &field_settings.account_name,
                 |m| { Message::UpdateBox(UpdateBox::AccountName(m)) }
-            ))))
+            )
+            .style(theme::TextInput::Custom(
+                TextInputType::Transparent.get_box()
+            )))))
             .style(theme::Container::Custom(ContainerType::Box.get_box()))
             .width(Length::FillPortion(7))
             .padding(10),
@@ -263,7 +269,10 @@ fn add_account(
                 container(column!(row!(
                     text_input("Solde", &field_settings.account_default_balance, |m| {
                         Message::UpdateBox(UpdateBox::AccountDefaultBalance(m))
-                    }),
+                    })
+                    .style(theme::TextInput::Custom(
+                        TextInputType::Transparent.get_box()
+                    )),
                     text("€")
                         .horizontal_alignment(alignment::Horizontal::Right)
                         .width(Length::Fill),
@@ -308,7 +317,10 @@ fn add_income(
                 "Nom du revenu",
                 &field_settings.income_name,
                 |m| { Message::UpdateBox(UpdateBox::IncomeName(m)) }
-            ))))
+            )
+            .style(theme::TextInput::Custom(
+                TextInputType::Transparent.get_box()
+            )))))
             .style(theme::Container::Custom(ContainerType::Box.get_box()))
             .width(Length::FillPortion(7))
             .padding(10),
@@ -317,7 +329,10 @@ fn add_income(
                 container(column!(row!(
                     text_input("Montant", &field_settings.income_amount, |m| {
                         Message::UpdateBox(UpdateBox::IncomeAmount(m))
-                    }),
+                    })
+                    .style(theme::TextInput::Custom(
+                        TextInputType::Transparent.get_box()
+                    )),
                     text("€")
                         .horizontal_alignment(alignment::Horizontal::Right)
                         .width(Length::Fill),
@@ -358,14 +373,20 @@ fn add_invoice(
                     "Nom de la facture",
                     &field_settings.invoice_name,
                     |m| { Message::UpdateBox(UpdateBox::InvoiceName(m)) }
-                ))))
+                )
+                .style(theme::TextInput::Custom(
+                    TextInputType::Transparent.get_box()
+                )))))
                 .style(theme::Container::Custom(ContainerType::Box.get_box()))
                 .width(Length::FillPortion(2))
                 .padding(10),
                 container(column!(row!(
                     text_input("Montant", &field_settings.invoice_amount, |m| {
                         Message::UpdateBox(UpdateBox::InvoiceAmount(m))
-                    }),
+                    })
+                    .style(theme::TextInput::Custom(
+                        TextInputType::Transparent.get_box()
+                    )),
                     text("€")
                         .horizontal_alignment(alignment::Horizontal::Right)
                         .width(Length::Fill),

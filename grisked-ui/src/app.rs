@@ -1,3 +1,4 @@
+use grisked_profile::models::account::Account;
 use iced::widget::{column, container};
 use iced::{executor, theme};
 use iced::{subscription, Subscription};
@@ -68,8 +69,20 @@ impl Application for Grisked {
             }
             Message::AddAccount => {
                 // Check if every field is correct
-                self.field_settings.account_name = String::new();
-                self.field_settings.account_default_balance = String::new();
+
+                match self.field_settings.account_default_balance.parse::<f64>() {
+                    Ok(default_balance) => {
+                        self.profile.data.register_account(Account::new(
+                            &self.field_settings.account_name,
+                            default_balance,
+                            Vec::new(),
+                            [0.1, 0.5, 0.5],
+                        ));
+                        self.field_settings.account_name = String::new();
+                        self.field_settings.account_default_balance = String::new();
+                    }
+                    _ => {}
+                }
             }
             Message::AddLabel => {
                 // Check if every field is corect

@@ -127,10 +127,15 @@ impl Data {
     }
 
     pub fn register_account(&mut self, account: Account) {
-        let id = self.account_id.unwrap();
-        self.account_id = Some(self.account_id.unwrap() + 1);
+        let mut id = 0;
+        match self.account_id {
+            Some(result) => id = result,
+            None => {}
+        }
+        self.account_id = Some(id + 1);
         let mut account = account;
         account.register(id);
+        self.accounts.push(account);
     }
 
     pub fn get_account(&mut self, id: usize) -> Option<&mut Account> {
