@@ -1,4 +1,3 @@
-use grisked_profile::models::account::Account;
 use grisked_profile::models::bill::{Bill, BillType};
 use iced::widget::{column, container};
 use iced::{executor, theme};
@@ -9,9 +8,10 @@ use grisked_profile::profile::Profile;
 
 use crate::entity::menu::*;
 use crate::entity::navbar::navbar_container;
+use crate::handler::{update_box, AccountPage};
 use crate::stylesheet::ContainerType;
 use crate::view::View;
-use crate::{handler, FieldSettings, Language, Message, UpdateBox};
+use crate::{handler, FieldSettings, Language, Message};
 
 pub fn launch() -> iced::Result {
     Grisked::run(Settings {
@@ -55,35 +55,17 @@ impl Application for Grisked {
                 handler::handle_keys(keycode, modifiers, self);
             }
             Message::PreviousAccount => {
-                if self.field_settings.account_id > 0 {
-                    self.field_settings.account_id -= 1;
-                }
+                AccountPage::PreviousAccount.handle(self);
             }
             Message::NextAccount => {
-                if self.field_settings.account_id < self.profile.data.get_accounts().len() - 1 {
-                    self.field_settings.account_id += 1;
-                }
+                AccountPage::NextAccount.handle(self);
             }
             Message::SaveRequested => {
                 println!("Saving json files !");
                 self.profile.save();
             }
             Message::AddAccount => {
-                // Check if every field is correct
-
-                match self.field_settings.account_default_balance.parse::<f64>() {
-                    Ok(default_balance) => {
-                        self.profile.data.register_account(Account::new(
-                            &self.field_settings.account_name,
-                            default_balance,
-                            Vec::new(),
-                            [0.1, 0.5, 0.5],
-                        ));
-                        self.field_settings.account_name = String::new();
-                        self.field_settings.account_default_balance = String::new();
-                    }
-                    _ => {}
-                }
+                AccountPage::AddAccount.handle(self);
             }
             Message::AddLabel => {
                 // Check if every field is corect
@@ -122,29 +104,9 @@ impl Application for Grisked {
                 self.field_settings.income_name = String::new();
                 self.field_settings.invoice_amount = String::new();
             }
-            Message::UpdateBox(value) => match value {
-                UpdateBox::LabelName(name) => {
-                    self.field_settings.label_name = name;
-                }
-                UpdateBox::AccountName(name) => {
-                    self.field_settings.account_name = name;
-                }
-                UpdateBox::InvoiceName(name) => {
-                    self.field_settings.invoice_name = name;
-                }
-                UpdateBox::IncomeName(name) => {
-                    self.field_settings.income_name = name;
-                }
-                UpdateBox::InvoiceAmount(amount) => {
-                    self.field_settings.invoice_amount = amount;
-                }
-                UpdateBox::IncomeAmount(amount) => {
-                    self.field_settings.income_amount = amount;
-                }
-                UpdateBox::AccountDefaultBalance(balance) => {
-                    self.field_settings.account_default_balance = balance;
-                }
-            },
+            Message::UpdateBox(value) => {
+                update_box::handle(value, self);
+            }
         }
         Command::none()
     }

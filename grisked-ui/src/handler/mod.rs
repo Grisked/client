@@ -2,8 +2,13 @@ use iced::keyboard::{KeyCode, Modifiers};
 
 use crate::{app::Grisked, entity::menu::MenuType};
 
+mod account_page;
 mod save;
 mod zoom;
+
+pub mod update_box;
+
+pub use account_page::AccountPage;
 
 pub fn handle_keys(keycode: KeyCode, modifiers: Modifiers, app: &mut Grisked) {
     if (keycode == KeyCode::Plus || keycode == KeyCode::Equals) && modifiers == Modifiers::CTRL {
