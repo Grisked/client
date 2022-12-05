@@ -51,7 +51,7 @@ impl Application for Grisked {
         match message {
             Message::MenuChanged(menu_type) => self.menu_type = menu_type,
             Message::KeyPressed(keycode, modifiers) => {
-                handler::zoom::handle(keycode, modifiers, &mut self.view)
+                handler::handle(keycode, modifiers, &mut self.view, &mut self.profile);
             }
             Message::PreviousAccount => {
                 if self.field_settings.account_id > 0 {

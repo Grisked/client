@@ -1,12 +1,9 @@
-use iced::keyboard::{KeyCode, Modifiers};
-
 use crate::view::View;
 
-pub fn handle(keycode: KeyCode, modifiers: Modifiers, view: &mut View) {
-    if (keycode == KeyCode::Plus || keycode == KeyCode::Equals) && modifiers == Modifiers::CTRL {
-        view.upscale();
-    }
-    if (keycode == KeyCode::Minus || keycode == KeyCode::Key6) && modifiers == Modifiers::CTRL {
-        view.downscale();
-    }
+pub fn zoom_in(view: &mut View) {
+    view.upscale();
+}
+
+pub fn zoom_out(view: &mut View) {
+    view.downscale();
 }
