@@ -238,6 +238,10 @@ fn add_label(
             .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
             .width(Length::Units(48))
             .on_press(Message::AddLabel),
+        button(svg(svg::Handle::from_path("assets/less_button.svg")))
+            .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
+            .width(Length::Units(48))
+            .on_press(Message::AddLabel),
     )
     .align_items(Alignment::Center),))
     .style(theme::Container::Custom(ContainerType::Box.get_box()))
