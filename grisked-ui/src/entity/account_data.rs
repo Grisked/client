@@ -1,6 +1,6 @@
 use iced::{
     alignment, theme,
-    widget::{column, container, row, svg, text, Column, Container, Row},
+    widget::{button, column, container, row, svg, text, Column, Container, Row},
     Color, Length,
 };
 
@@ -12,7 +12,7 @@ use grisked_profile::{
 use crate::{
     entity::accounts::{add_income, add_invoice},
     font::{FontFamily, FontType},
-    stylesheet::ContainerType,
+    stylesheet::{ButtonType, ContainerType},
     view::{View, ViewSize},
     FieldSettings, Message,
 };
@@ -72,6 +72,12 @@ fn get_incomes(view: &View, account: &Account) -> Column<'static, Message> {
                 .style(Color::from([0.0, (134.0 / 255.0), 0.0]))
                 .size(ViewSize::Text.get_size(view)),
         );
+        row = row.push(
+            button(svg(svg::Handle::from_path("assets/less_button.svg")))
+                .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
+                .width(iced::Length::Units(ViewSize::Text.get_size(view)))
+                .on_press(Message::AddLabel),
+        );
 
         column = column.push(row);
     }
@@ -129,6 +135,13 @@ fn get_invoices(profile: &Profile, view: &View, account: &Account) -> Column<'st
                 .get_text(invoice.pretty_price(), FontFamily::Kanit)
                 .size(ViewSize::Text.get_size(view)),
         );
+        row = row.push(
+            button(svg(svg::Handle::from_path("assets/less_button.svg")))
+                .style(theme::Button::Custom(ButtonType::BoxIgnored.get_box()))
+                .width(iced::Length::Units(ViewSize::Text.get_size(view)))
+                .on_press(Message::AddLabel),
+        );
+
         column = column.push(row);
     }
 
