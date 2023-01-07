@@ -1,6 +1,6 @@
 use iced::{
     alignment, theme,
-    widget::{column, container, row, svg, Column, Container, Row},
+    widget::{column, container, row, svg, text, Column, Container, Row},
     Color, Length,
 };
 
@@ -10,6 +10,7 @@ use grisked_profile::{
 };
 
 use crate::{
+    entity::accounts::{add_income, add_invoice},
     font::{FontFamily, FontType},
     stylesheet::ContainerType,
     view::{View, ViewSize},
@@ -23,7 +24,7 @@ pub fn account_data(
     account: &Account,
 ) -> Container<'static, Message> {
     let top = top_side(view, field_settings, account);
-    let bottom = bottom_side(profile, view, account);
+    let bottom = bottom_side(profile, view, account, field_settings);
 
     let container: Container<Message> = container(column!(column!(top, bottom).spacing(50)))
         .height(Length::FillPortion(7))
@@ -134,54 +135,65 @@ fn get_invoices(profile: &Profile, view: &View, account: &Account) -> Column<'st
     column
 }
 
-fn bottom_side(profile: &Profile, view: &View, account: &Account) -> Column<'static, Message> {
+fn bottom_side(
+    profile: &Profile,
+    view: &View,
+    account: &Account,
+    field_settings: &FieldSettings,
+) -> Column<'static, Message> {
     let color = if account.get_account_balance() > 0.0 {
         Color::from([0.0, (134.0 / 255.0), 0.0])
     } else {
         Color::from([(189.0 / 255.0), 0.0, 0.0])
     };
-
     column!(
-        // Titres du bas
         row!(
-            container(column!(
-                row!(
-                    FontType::Title
-                        .get_text("Factures".to_string(), FontFamily::IndieFlower)
-                        .width(Length::Fill)
-                        .style(Color::from([0.2235, 0.0, 0.5294]))
-                        .size(ViewSize::Title.get_size(view)),
-                    FontType::TextBold
-                        .get_text(account.pretty_account_balance(), FontFamily::Kanit)
-                        .width(Length::Fill)
-                        .style(color)
-                        .size(ViewSize::Title.get_size(view))
-                        .horizontal_alignment(alignment::Horizontal::Right),
-                )
-                .padding([0, 0, 10, 0]),
-                get_invoices(profile, view, account),
-                row!(FontType::Title
-                    .get_text("Revenus".to_string(), FontFamily::IndieFlower)
-                    .width(Length::Fill)
-                    .style(Color::from([0.2235, 0.0, 0.5294]))
-                    .size(ViewSize::Title.get_size(view)),)
-                .padding([10, 0, 10, 0]),
-                get_incomes(view, account)
-            ))
-            .style(theme::Container::Custom(ContainerType::Box.get_box()))
-            .padding(10)
-            .width(Length::FillPortion(2)),
-            container(
-                FontType::Title
-                    .get_text("Ajouter un revenu".to_string(), FontFamily::IndieFlower)
-                    .width(Length::FillPortion(7))
-                    .style(Color::from([0.2235, 0.0, 0.5294]))
-                    .size(30)
-                    .horizontal_alignment(alignment::Horizontal::Center),
-            )
-            .style(theme::Container::Custom(ContainerType::Box.get_box()))
-            .width(Length::FillPortion(1)),
+            FontType::Title
+                .get_text("Ajouter une facture".to_string(), FontFamily::IndieFlower)
+                .width(Length::FillPortion(7))
+                .style(Color::from([0.2235, 0.0, 0.5294]))
+                .size(30)
+                .horizontal_alignment(alignment::Horizontal::Center),
+            FontType::Title
+                .get_text("Ajouter un revenu".to_string(), FontFamily::IndieFlower)
+                .width(Length::FillPortion(7))
+                .style(Color::from([0.2235, 0.0, 0.5294]))
+                .size(30)
+                .horizontal_alignment(alignment::Horizontal::Center),
         )
         .spacing(50),
+        row!(
+            add_invoice(profile, view, field_settings),
+            add_income(profile, view, field_settings)
+        )
+        .spacing(50),
+        row!(text(" ")),
+        column!(container(column!(
+            row!(
+                FontType::Title
+                    .get_text("Factures".to_string(), FontFamily::IndieFlower)
+                    .width(Length::Fill)
+                    .style(Color::from([0.2235, 0.0, 0.5294]))
+                    .size(ViewSize::Title.get_size(view)),
+                FontType::TextBold
+                    .get_text(account.pretty_account_balance(), FontFamily::Kanit)
+                    .width(Length::Fill)
+                    .style(color)
+                    .size(ViewSize::Title.get_size(view))
+                    .horizontal_alignment(alignment::Horizontal::Right),
+            )
+            .padding([0, 0, 10, 0]),
+            get_invoices(profile, view, account),
+            row!(FontType::Title
+                .get_text("Revenus".to_string(), FontFamily::IndieFlower)
+                .width(Length::Fill)
+                .style(Color::from([0.2235, 0.0, 0.5294]))
+                .size(ViewSize::Title.get_size(view)),)
+            .padding([10, 0, 10, 0]),
+            get_incomes(view, account)
+        ))
+        .style(theme::Container::Custom(ContainerType::Box.get_box()))
+        .padding(10)
+        .width(Length::Fill),)
     )
 }

@@ -305,7 +305,7 @@ fn add_account(
     .padding(10)
 }
 
-fn add_income(
+pub fn add_income(
     _profile: &Profile,
     _view: &View,
     field_settings: &FieldSettings,
@@ -360,7 +360,7 @@ fn add_income(
     .padding(10)
 }
 
-fn add_invoice(
+pub fn add_invoice(
     _profile: &Profile,
     _view: &View,
     field_settings: &FieldSettings,
