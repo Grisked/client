@@ -29,6 +29,7 @@ impl MenuType {
                 Some(entity::account_data(profile, view, field_settings, account))
             }
             MenuType::Backup => Some(entity::backup(profile, view)),
+            MenuType::Deadlines => Some(entity::deadlines(profile, view, field_settings)),
             _ => None,
         }
     }
